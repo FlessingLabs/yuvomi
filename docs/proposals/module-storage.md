@@ -1,6 +1,6 @@
 # Proposal: persistent household storage for third-party modules
 
-Status: design proposal; no API or implementation is introduced by this document.
+Status: implemented on the FlessingLabs fork, branch `feat/module-storage` (migration 274, `server/services/module-records.js`, `server/routes/module-records.js`, documented in MODULES.md under "Module Storage"). Not agreed with the Yuvomi maintainer yet - see discussion #2452.
 
 ## Problem
 
@@ -48,4 +48,4 @@ Add a core-owned table through an append-only migration, keyed by module ID and 
 
 Users installing a small module reasonably expect it to work without deploying another service. A bounded record store would let simple extensions meet that expectation while preserving Yuvomi's authentication, permission and backup model. It avoids reusing shopping lists or pantry stock as unrelated module storage.
 
-Maintainer feedback is requested before implementing the API. This branch currently contains the proposal only.
+Maintainer feedback is still requested; the implementation follows this document so it can be reviewed as a whole.

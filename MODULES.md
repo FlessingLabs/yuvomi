@@ -161,6 +161,31 @@ Modules must follow the same frontend security rules as core Yuvomi:
 - Do not use `innerHTML`.
 - Do not bypass authentication, authorization, CSRF, or CSP.
 
+## Module Storage
+
+A module that only needs to remember a little household data - a list of entries, a few settings - does not need a service of its own. Yuvomi keeps small JSON records for it in its own database, behind the same sign-in, permissions, CSRF protection and backup as everything else. Nothing a module ships runs on the server: the module's browser code sends JSON, and Yuvomi stores it.
+
+**Requirements.** The module is installed, enabled and declares a permission module (`capabilities.permissions.module`), because access follows `ext:<module-id>`: `read` for listing and reading, `write` for everything else. Scoped API tokens need `ext:<module-id>:read` or `:write`. Paired displays and Shared-expenses guests get no access.
+
+```js
+import { api } from '/api.js';
+
+const base = '/modules/example-module/records';
+const page = await api.get(`${base}?limit=100`);                  // { data: [record], next }
+const made = await api.post(base, { data: { title: 'Hello' } });   // { data: record }, 201
+const put  = await api.put(`${base}/${made.data.id}`, { data: { title: 'Hi' }, revision: made.data.revision });
+await api.delete(`${base}/${made.data.id}?revision=${put.data.revision}`);
+```
+
+A record is `{ id, revision, data, created_at, updated_at }`. `id` is a UUID the server assigns, `data` is any JSON object, and Yuvomi does not look inside it: validating fields is the module's job.
+
+- **Pages.** Records come in stable id order, 100 per page by default, at most 200 (`limit`). Pass `next` as `after` for the next page; `next` is `null` on the last one.
+- **Revisions.** Replacing (PUT) and deleting take the revision you last read. If somebody changed the record in the meantime, the answer is 409 `record_conflict` and nothing is written. Show the current version and let the person decide; do not retry with the new revision on their behalf, or you overwrite what the other person just did.
+- **Limits.** One record holds at most 16 KiB of JSON, a module at most 1,000 records and 4 MiB together (413 `record_too_large` / `module_storage_full`). The store is for small household data, not for secrets, files or models; those belong in a service (next section).
+- **Everybody in the household with `read` sees every record.** There is no per-person privacy inside a module's storage, so do not put one member's private data there.
+- **Lifecycle.** Disabling, updating or removing a module never deletes its records; a disabled or removed module answers 404 `module_storage_unavailable` until it is back. An admin sees what every module stores at `GET /api/v1/modules/storage` and deletes a module's records for good with `DELETE /api/v1/modules/<module-id>/records` and the body `{ "confirm": "<module-id>" }` - from a browser session only, never with a token.
+- **Older Yuvomi.** On a Yuvomi without module storage the route does not exist and answers 404 *without* `reason: "module_storage_unavailable"`. Tell the user that this Yuvomi is too old for your module rather than showing a generic error.
+
 ## Modules With A Backend Service
 
 A module page is browser code with no server of its own. When a module needs stored state, scheduled work, or a third-party credential, run that as a separate service beside Yuvomi rather than as a patch to core, and leave Yuvomi on its official image. What follows is what such a module needs in order to survive a Yuvomi upgrade.
