@@ -54,10 +54,17 @@ jobs:
           docker run -d --name yuvomi -p 3000:3000 \
             -e SESSION_SECRET=ci-only-session-secret-0123456789abcdefghijkl \
             -e SESSION_SECURE=false -e TRUST_PROXY=loopback -e TZ=Europe/Berlin \
+            -e DB_PATH=/data/yuvomi.db -e MODULES_DIR=/app/modules -e BACKUP_DIR=/backups \
             -v "$PWD/ci/data:/data" -v "$PWD/ci/backups:/backups" -v "$PWD/ci/modules:/app/modules" \
             yuvomi-module-storage:ci
-          for i in $(seq 1 60); do curl -sf http://127.0.0.1:3000/health && break; sleep 2; done
-          docker logs yuvomi 2>&1 | grep -F "Migration 274 applied"
+          ok=
+          for i in $(seq 1 60); do
+            if curl -sf http://127.0.0.1:3000/health; then ok=1; break; fi
+            sleep 2
+          done
+          test -n "$ok" || { echo "::error title=Yuvomi did not answer /health within 120 s::state=$(docker inspect -f '{{.State.Status}} exit={{.State.ExitCode}}' yuvomi)"; exit 1; }
+          docker logs yuvomi 2>&1 | grep -F "Migration 274 applied" \
+            || { echo "::error title=Migration 274 not in the container log::"; exit 1; }
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
@@ -77,6 +84,13 @@ jobs:
       - name: Container log
         if: always()
         run: docker logs yuvomi 2>&1 | tail -n 200
+      # Job-Logs sind ohne Anmeldung nicht lesbar, Annotationen schon: bei einem
+      # Fehler die letzten Zeilen des Containers als Annotation ausgeben.
+      - name: Container log as annotation
+        if: failure()
+        run: |
+          tail_log=$(docker logs yuvomi 2>&1 | tail -n 40 | cut -c1-300 | sed ':a;N;$!ba;s/%/%25/g;s/\r//g;s/\n/%0A/g')
+          echo "::error title=Last container log lines::${tail_log}"
 
   publish:
     name: Publish the test image
