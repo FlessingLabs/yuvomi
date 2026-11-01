@@ -4,6 +4,8 @@ Stand: 1. November 2026. **Architekturentwurf, keine fertige Implementierung.**
 
 [Ausführlicher englischer Entwurf](backend-modules.md) · [Nachricht an den Entwickler](backend-modules-discussion.md)
 
+Vorschlag beim Entwickler: https://github.com/ulsklyc/yuvomi/discussions/2452
+
 ## Warum wir das vorschlagen
 
 QuickShop lässt sich als Modul installieren, braucht zum dauerhaften Speichern seines Artikelkatalogs bisher aber einen eigenen Dienst. Auf einer einfachen Unraid-Installation kommen dadurch Container, Routing, Einrichtung und eine eigene Sicherung hinzu. Der erste sichtbare Effekt ist „QuickShop-Dienst nicht erreichbar“, obwohl die Modulinstallation erfolgreich war.

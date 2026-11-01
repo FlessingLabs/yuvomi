@@ -4,6 +4,8 @@ Status: discussion draft, 1 November 2026. No runtime, installer change or new A
 
 [German overview](backend-modules.de.md) · [Ready-to-post discussion](backend-modules-discussion.md)
 
+Upstream discussion: https://github.com/ulsklyc/yuvomi/discussions/2452
+
 ## Problem and intended outcome
 
 FlessingLabs QuickShop adds a reusable shopping-item catalogue. Installing its browser module succeeds, but without its separately deployed service the user sees “QuickShop service unreachable”. On a plain Unraid installation, arranging same-origin access adds a container, routing or a port change, and a separate backup. This is disproportionate for a small shared list.
