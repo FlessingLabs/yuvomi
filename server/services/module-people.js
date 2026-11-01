@@ -18,7 +18,7 @@
  * aendert sich nichts.
  */
 import { isAdminRequest } from '../middleware/require-admin.js';
-import { householdMemberSql, activeAccountSql } from './household-members.js';
+import { householdMemberSql, activeAccountSql, memberOrderSql } from './household-members.js';
 
 export const ACCESS_NONE = 'none';
 export const ACCESS_READ = 'read';
@@ -75,7 +75,7 @@ export function listPeople(database, req, moduleId) {
     SELECT u.id, u.display_name, u.avatar_color, u.family_role
     FROM users u
     WHERE ${householdMemberSql('u')} AND ${activeAccountSql('u')}
-    ORDER BY u.display_name COLLATE NOCASE, u.id
+    ORDER BY ${memberOrderSql('u')}
   `).all();
   const out = [];
   for (const m of members) {
