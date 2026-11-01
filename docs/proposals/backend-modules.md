@@ -18,6 +18,10 @@ The current MODULES.md documents browser modules plus separately operated backen
 
 This RFC proposes changes to that contract and asks which parts are acceptable upstream. It does not claim that a backend prefix currently starts or routes a service. It retains the prohibition on direct access to yuvomi.db by extension processes.
 
+## Existing runtime to evaluate before building another
+
+Discussion #746 presents https://github.com/JakeTheRabbit/yuvomi-extensions with a server runtime, Yuvomi client and browser SDK. The maintainer explicitly supports that sidecar model. This RFC does not claim those pieces are missing from the ecosystem: evaluate compatibility, licensing, deployment and security of that implementation before proposing a new runtime. The remaining question is whether a smaller core record API and a simpler supported setup/gateway are acceptable, or whether deployment improvements should live entirely in that external project.
+
 ## Capability tiers
 
 | Tier | Example | Infrastructure needed |
@@ -102,6 +106,8 @@ This branch publishes the design only. A separate local record-store prototype e
 - MODULES.md, “Modules With A Backend Service” and “Installing From Settings”
 - docs/SCOPE.md, “The shape that works: Yuvomi stays the server, the bridge is a client”
 - server/services/module-capabilities.js; server/services/modules.js; server/scopes.js
+- https://github.com/ulsklyc/yuvomi/discussions/746
+- https://github.com/JakeTheRabbit/yuvomi-extensions
 - https://github.com/ulsklyc/yuvomi/issues/922
 - https://github.com/ulsklyc/yuvomi/pull/919
 - https://github.com/FlessingLabs/yuvomi-quickshop

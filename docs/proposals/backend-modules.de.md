@@ -40,6 +40,10 @@ Ein einzelner angepasster Yuvomi-Container mit zusätzlichen überwachten Prozes
 - Sicherung: neben Datenbankeinträgen auch Dateien, Auftragszustände und den Wiederherstellungsweg für Geheimnisse berücksichtigen.
 - KI: lokale oder externe Verarbeitung ausdrücklich wählen; Anbieter und übertragene Daten anzeigen. Ergebnisse prüfen lassen, bevor Einkaufslisten oder andere Daten verändert werden.
 
+## Vorhandene Arbeit zuerst nutzen
+
+In [Diskussion #746](https://github.com/ulsklyc/yuvomi/discussions/746) gibt es bereits eine [Sidecar-Plattform](https://github.com/JakeTheRabbit/yuvomi-extensions), die der Entwickler unterstützt. Ihre Eignung und Installation sollen zuerst geprüft werden. Unser Vorschlag fordert keine zweite parallele Plattform, sondern fragt nach einem kleinen Modulspeicher und einer einfacheren Einrichtung beziehungsweise Anbindung. Falls der Entwickler das bewusst außerhalb von Yuvomi halten möchte, können Verbesserungen auch dort stattfinden.
+
 ## Vorgehen
 
 1. Mit dem Entwickler den Umfang abstimmen.

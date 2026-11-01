@@ -6,6 +6,8 @@ We understand and respect the documented direction: browser modules use the publ
 
 The practical difficulty is installation. A household installs QuickShop from Settings successfully, then sees “QuickShop service unreachable” because a shared catalogue requires a separate service and same-origin routing. On a basic Unraid setup this means extra deployment, routing/port changes and backup configuration. The same infrastructure would be repeated for future extensions.
 
+We also read [discussion #746](https://github.com/ulsklyc/yuvomi/discussions/746) and your support for JakeTheRabbit's existing sidecar platform. We would evaluate and reuse that work where suitable rather than build a competing runtime. Our question is about reducing setup friction and agreeing which small pieces, if any, belong in core.
+
 Would you be open to discussing a staged approach?
 
 1. **Small core-managed record storage** for shared module state, using existing extension permissions, bounded quotas, atomic revision checks and backup/restore support. This would let QuickShop work without a backend service.
