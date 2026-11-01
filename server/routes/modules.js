@@ -9,6 +9,8 @@
  */
 
 import express from 'express';
+import moduleRecordsRouter from './module-records.js';
+import moduleStorageRouter from './module-storage.js';
 import path from 'node:path';
 import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
 import { requireAdmin } from '../auth.js';
@@ -31,6 +33,11 @@ import {
 import { createGithubInstaller } from '../services/module-github.js';
 
 const router = express.Router();
+// Modulspeicher (Migration 274): Datensaetze eines Moduls und die Uebersicht
+// fuer Administratoren. Vor allen anderen Routen, damit `/:id` sie nicht
+// verschluckt; feste Pfade wie `/assets/...` reicht der Speicher-Router weiter.
+router.use('/storage', moduleStorageRouter);
+router.use('/:moduleId/records', moduleRecordsRouter);
 const log = createLogger('Modules');
 
 // Installing a module downloads or unpacks up to 20 MB and writes it to disk.

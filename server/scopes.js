@@ -133,6 +133,15 @@ function requiredAccess(method) {
 }
 
 /**
+ * Feste Pfade unter /api/v1/modules, die wie `/modules/<id>/records` aussehen
+ * koennten: `/modules/assets/<id>/...` liefert die Dateien eines Moduls aus,
+ * auch eines Moduls namens `records`. Sie gehoeren nie zum Modulspeicher.
+ * EINE Liste fuer die Scope-Zuordnung hier und den Router
+ * (routes/module-records.js) - DECISIONS.md, Eintrag 2.
+ */
+export const RESERVED_MODULE_SEGMENTS = Object.freeze(new Set(['assets', 'install', 'storage']));
+
+/**
  * Ermittelt den Modul-Schlüssel für einen /api/v1-Pfad (ohne führendes /api/v1).
  *
  * GROSS-/KLEINSCHREIBUNG WIRD HIER GEFALTET, WEIL EXPRESS SIE BEIM ROUTEN
@@ -149,6 +158,22 @@ function requiredAccess(method) {
 function moduleForPath(path) {
   const cleaned = String(path || '').replace(/^\/+/, '').toLowerCase();
   const parts = cleaned.split('/').filter(Boolean);
+  // MODULSPEICHER (Migration 274): /modules/<id>/records gehoert dem Modul
+  // `ext:<id>`, nicht der Modulverwaltung - sonst bekaeme kein Token mit
+  // `ext:<id>:read` je Zugang, und keines ohne ihn wuerde abgewiesen, weil
+  // /modules selbst kein scopebares Modul ist. Die Segmente werden dekodiert
+  // wie Express sie dekodiert (`%61lpha` ist `alpha`); eine kaputte Kodierung
+  // gibt nie Zugang. Feste Pfade des Modul-Routers (RESERVED_MODULE_SEGMENTS)
+  // fallen nicht darunter. Kennt der Katalog `ext:<id>` nicht (abgeschaltet,
+  // entfernt), ist das Ergebnis null: ein gescoptes Token wird dann abgewiesen,
+  // und die Route selbst antwortet jeder Sitzung mit 404.
+  let decoded;
+  try { decoded = cleaned.split('/').map(decodeURIComponent); } catch { return null; }
+  if (decoded[0] === 'modules' && decoded[2] === 'records'
+    && !RESERVED_MODULE_SEGMENTS.has(decoded[1])) {
+    const key = `ext:${decoded[1]}`;
+    return MODULE_KEY_SET.has(key) ? key : null;
+  }
   if (parts[0] === 'extensions' && parts[1]) {
     const extKey = PREFIX_TO_MODULE.get(`extensions/${parts[1]}`);
     if (extKey) return extKey;

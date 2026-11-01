@@ -1,4 +1,5 @@
 import { jsonBody, op, stringPathParam } from '../helpers.js';
+import { LIMITS, PAGE_DEFAULT, PAGE_MAX } from '../../services/module-records.js';
 import { ZIP_LIMITS } from '../../services/zip-reader.js';
 
 // Aus dem ZIP-Leser statt aus module-install.js: der zieht die Datenbank nach,
@@ -49,8 +50,185 @@ function installResponses(extra = {}) {
   };
 }
 
+// Modulspeicher (Migration 274, routes/module-records.js). Ein Satz fuer alle
+// Operationen, damit Grenzen und Lebensdauer an jeder dasselbe sagen.
+const RECORDS_NOTE = `Small household-shared JSON records owned by an installed, enabled third-party module that declares \`capabilities.permissions.module\`. Access follows the module's \`ext:<moduleId>\` permission (read for GET, write otherwise); scoped API tokens need \`ext:<moduleId>:read\` or \`:write\`; paired displays and Shared-expenses guests have no access. A disabled, errored or removed module answers 404 \`module_storage_unavailable\`, but its records are kept until an admin deletes them with DELETE /api/v1/modules/{moduleId}/records. The content is opaque to Yuvomi: one JSON object of at most ${LIMITS.recordBytes} bytes per record, at most ${LIMITS.records} records and ${LIMITS.totalBytes} bytes per module (413 \`record_too_large\` / \`module_storage_full\`). Not meant for secrets, files or models. Replace and delete take the revision the caller last read; a stale one answers 409 \`record_conflict\` and changes nothing.`;
+
+function mcpExcluded(operation) {
+  operation[MCP_EXCLUDE] = true;
+  return operation;
+}
+
+function recordSchema() {
+  return {
+    type: 'object',
+    properties: {
+      id: { type: 'string', format: 'uuid', description: 'Server-generated record id' },
+      revision: { type: 'integer', minimum: 1, description: 'Starts at 1 and grows by one with every replace' },
+      data: { type: 'object', additionalProperties: true, description: 'The JSON object the module stored' },
+      created_at: { type: 'string', format: 'date-time' },
+      updated_at: { type: 'string', format: 'date-time' },
+    },
+    required: ['id', 'revision', 'data', 'created_at', 'updated_at'],
+  };
+}
+
+function recordResponse(description) {
+  return {
+    description,
+    content: { 'application/json': { schema: { type: 'object', properties: { data: recordSchema() }, required: ['data'] } } },
+  };
+}
+
+function recordsCommonResponses(extra = {}) {
+  return {
+    401: { $ref: '#/components/responses/Unauthorized' },
+    403: { description: 'No access to this module (`module_access_denied`), or the token scope does not cover `ext:<moduleId>`' },
+    404: { description: 'The module is not installed, not enabled, has errors or declares no permission module (`module_storage_unavailable`), or the record does not exist (`record_not_found`)' },
+    500: { $ref: '#/components/responses/InternalServerError' },
+    ...extra,
+  };
+}
+
+const RECORD_WRITE_BODY = {
+  required: true,
+  description: 'The record content',
+  content: { 'application/json': { schema: {
+    type: 'object',
+    properties: {
+      data: { type: 'object', additionalProperties: true },
+      revision: { type: 'integer', minimum: 1, description: 'Replace only: the revision last read' },
+    },
+    required: ['data'],
+  } } },
+};
+
+function recordsPaths() {
+  const moduleParam = stringPathParam('moduleId', 'Module ID');
+  const recordParam = stringPathParam('recordId', 'Record ID (UUID)');
+  return {
+    '/api/v1/modules/storage': {
+      get: op({
+        summary: 'Module storage usage per module',
+        tag: 'Modules',
+        admin: true,
+        description: 'Every module that has records, with record count, bytes and the last change - including disabled and removed modules, whose records are kept until an admin deletes them. Other callers get 403 `module_access_denied`.',
+        responses: {
+          200: {
+            description: 'Usage per module',
+            content: { 'application/json': { schema: { type: 'object', properties: { data: { type: 'array', items: { type: 'object', properties: {
+              module_id: { type: 'string' }, records: { type: 'integer' }, bytes: { type: 'integer' }, updated_at: { type: 'string', format: 'date-time' },
+            }, required: ['module_id', 'records', 'bytes', 'updated_at'] } } }, required: ['data'] } } },
+          },
+          401: { $ref: '#/components/responses/Unauthorized' },
+          403: { description: 'Not an admin (`module_access_denied`)' },
+          500: { $ref: '#/components/responses/InternalServerError' },
+        },
+      }),
+    },
+    '/api/v1/modules/{moduleId}/records': {
+      get: op({
+        summary: 'List module records',
+        tag: 'Modules',
+        description: `${RECORDS_NOTE} Records come in stable id order, ${PAGE_DEFAULT} per page by default (\`limit\` 1-${PAGE_MAX}); pass \`next\` from the answer as \`after\` for the next page. \`next\` is null on the last page. An invalid page answers 400 \`record_page_invalid\`.`,
+        params: [
+          moduleParam,
+          { name: 'limit', in: 'query', required: false, schema: { type: 'integer', minimum: 1, maximum: PAGE_MAX } },
+          { name: 'after', in: 'query', required: false, schema: { type: 'string', format: 'uuid' } },
+        ],
+        responses: recordsCommonResponses({
+          200: {
+            description: 'One page of records',
+            content: { 'application/json': { schema: { type: 'object', properties: {
+              data: { type: 'array', items: recordSchema() },
+              next: { type: ['string', 'null'] },
+            }, required: ['data', 'next'] } } },
+          },
+          400: { description: 'Invalid `limit` or `after` (`record_page_invalid`)' },
+        }),
+      }),
+      post: op({
+        summary: 'Create a module record',
+        tag: 'Modules',
+        stateChanging: true,
+        description: `${RECORDS_NOTE} The server assigns the id and revision 1.`,
+        params: [moduleParam],
+        requestBody: RECORD_WRITE_BODY,
+        responses: recordsCommonResponses({
+          201: recordResponse('Created record'),
+          400: { description: '`data` is not a JSON object (`record_object_required`)' },
+          413: { description: 'Record too large (`record_too_large`) or the module has no room left (`module_storage_full`)' },
+        }),
+      }),
+      delete: mcpExcluded(op({
+        summary: 'Delete all records of a module',
+        tag: 'Modules',
+        admin: true,
+        stateChanging: true,
+        description: 'The one way module data is removed for good. Admin only (others get 403 `module_access_denied`), from a signed-in browser session (an API token gets 403 `module_session_required`), and the body must name the module: `{ "confirm": "<moduleId>" }`, otherwise 400 `module_purge_confirm_required`. Works for disabled and removed modules too. Disabling, updating or deleting a module never removes its records.',
+        params: [moduleParam],
+        requestBody: jsonBody(null, '`{ "confirm": "<moduleId>" }`'),
+        responses: {
+          200: {
+            description: 'Number of deleted records',
+            content: { 'application/json': { schema: { type: 'object', properties: { data: { type: 'object', properties: {
+              module_id: { type: 'string' }, deleted: { type: 'integer' },
+            }, required: ['module_id', 'deleted'] } }, required: ['data'] } } },
+          },
+          400: { description: 'Missing or wrong confirmation (`module_purge_confirm_required`)' },
+          401: { $ref: '#/components/responses/Unauthorized' },
+          403: { description: 'Not an admin (`module_access_denied`) or not a browser session (`module_session_required`)' },
+          404: { description: 'Invalid module id (`module_storage_unavailable`)' },
+          500: { $ref: '#/components/responses/InternalServerError' },
+        },
+      })),
+    },
+    '/api/v1/modules/{moduleId}/records/{recordId}': {
+      get: op({
+        summary: 'Get a module record',
+        tag: 'Modules',
+        description: RECORDS_NOTE,
+        params: [moduleParam, recordParam],
+        responses: recordsCommonResponses({ 200: recordResponse('The record') }),
+      }),
+      put: op({
+        summary: 'Replace a module record',
+        tag: 'Modules',
+        stateChanging: true,
+        description: `${RECORDS_NOTE} \`revision\` is required (400 \`record_revision_required\`); the answer carries the new revision.`,
+        params: [moduleParam, recordParam],
+        requestBody: RECORD_WRITE_BODY,
+        responses: recordsCommonResponses({
+          200: recordResponse('Replaced record'),
+          400: { description: '`data` is not a JSON object (`record_object_required`) or `revision` is missing (`record_revision_required`)' },
+          409: { description: 'The record was changed since that revision (`record_conflict`); nothing was written' },
+          413: { description: 'Record too large (`record_too_large`) or the module has no room left (`module_storage_full`)' },
+        }),
+      }),
+      delete: op({
+        summary: 'Delete a module record',
+        tag: 'Modules',
+        stateChanging: true,
+        description: `${RECORDS_NOTE} The revision goes in the body (\`{ "revision": 3 }\`) or in the query (\`?revision=3\`); it is required (400 \`record_revision_required\`).`,
+        params: [moduleParam, recordParam, { name: 'revision', in: 'query', required: false, schema: { type: 'integer', minimum: 1 } }],
+        responses: recordsCommonResponses({
+          200: {
+            description: 'Deleted',
+            content: { 'application/json': { schema: { type: 'object', properties: { data: { type: 'object', properties: {
+              id: { type: 'string' }, deleted: { type: 'boolean', const: true },
+            }, required: ['id', 'deleted'] } }, required: ['data'] } } },
+          },
+          400: { description: '`revision` is missing (`record_revision_required`)' },
+          409: { description: 'The record was changed since that revision (`record_conflict`); nothing was deleted' },
+        }),
+      }),
+    },
+  };
+}
+
 export function modulesPaths() {
   return {
+    ...recordsPaths(),
     '/api/v1/modules': {
       get: op({
         summary: 'List installed extension modules',

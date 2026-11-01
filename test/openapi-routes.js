@@ -103,7 +103,7 @@ function routerSources(entry, prefix = '', seen = new Map()) {
     const file = imports.get(m[2]);
     if (!file) continue;
     mounted.add(file);
-    routerSources(file, prefix + m[1].replace(/\/+$/, ''), seen);
+    routerSources(file, prefix + m[1].replace(/:(\w+)/g, '{$1}').replace(/\/+$/, ''), seen);
   }
 
   // Aufgeteilte Module ohne Sub-Mount (calendar/, budget/, health/) haengen

@@ -266,9 +266,10 @@ export function buildExtensionCatalog(modules) {
         labelKey: w.labelKey || null,
       });
     }
-    if (caps.apiPrefix && caps.scopeKey) {
-      const segment = caps.apiPrefix.replace(/^\/api\//, '').replace(/\/+$/, '');
-      scopeModules.push({ key: caps.scopeKey, prefixes: [segment] });
+    if (caps.permissionModule && caps.scopeKey) {
+      const prefixes = caps.apiPrefix
+        ? [caps.apiPrefix.replace(/^\/api\//, '').replace(/\/+$/, '')] : [];
+      scopeModules.push({ key: caps.scopeKey, prefixes });
     }
   }
 

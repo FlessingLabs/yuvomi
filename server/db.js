@@ -11777,6 +11777,22 @@ const MIGRATIONS = [
       database.exec('UPDATE ics_subscriptions SET etag = NULL, last_modified = NULL');
     },
   },
+
+  {
+    version: 274,
+    description: 'Persistent household JSON records for third-party modules',
+    up: `
+      CREATE TABLE IF NOT EXISTS module_records (
+        module_id TEXT NOT NULL,
+        id TEXT NOT NULL,
+        data TEXT NOT NULL CHECK (json_valid(data) AND json_type(data) = 'object'),
+        revision INTEGER NOT NULL DEFAULT 1 CHECK (revision > 0),
+        created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+        updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+        PRIMARY KEY (module_id, id)
+      );
+    `,
+  },
 ];
 
 /**
