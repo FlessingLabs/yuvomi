@@ -75,12 +75,15 @@ jobs:
           docker restart yuvomi
           for i in $(seq 1 60); do curl -sf http://127.0.0.1:3000/health && break; sleep 2; done
           node quickshop/tools/e2e/e2e-core-storage.mjs persist --base http://127.0.0.1:3000
-      - name: The process runs unprivileged and the healthcheck passes
+      # Das Image selbst traegt keinen HEALTHCHECK (den setzen die
+      # Compose-Dateien); geprueft wird mit derselben Abfrage wie dort.
+      - name: The server process runs unprivileged and answers its health check
         run: |
           uid=$(docker exec yuvomi sh -c "awk '/^Uid:/ {print \$2}' /proc/1/status")
-          echo "uid of the server process: $uid"; test "$uid" != "0"
-          for i in $(seq 1 30); do s=$(docker inspect -f '{{.State.Health.Status}}' yuvomi); [ "$s" = healthy ] && break; sleep 3; done
-          echo "health: $s"; test "$s" = healthy
+          echo "uid of the server process: $uid"
+          test "$uid" != "0" || { echo "::error title=Server process runs as root::uid=$uid"; exit 1; }
+          docker exec yuvomi node -e "require('http').get('http://localhost:3000/health', r => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))" \
+            || { echo "::error title=Health check inside the container failed::"; exit 1; }
       - name: Container log
         if: always()
         run: docker logs yuvomi 2>&1 | tail -n 200

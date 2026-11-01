@@ -18,7 +18,7 @@ Module code still never runs on the server. Module storage holds JSON a module's
 - `ghcr.io/flessinglabs/yuvomi:module-storage-test` - follows the branch
 - `ghcr.io/flessinglabs/yuvomi:module-storage-<sha7>` - one fixed build
 
-Never `latest`, never a version number, never under `ulsklyc/yuvomi` or `oikos`. Each image is published only after the container test in `fork-test-image.yml` passed (QuickShop 2 acceptance test, restart, persistence, unprivileged process, healthcheck).
+Never `latest`, never a version number, never under `ulsklyc/yuvomi` or `oikos`. Each image is published only after the container test in `fork-test-image.yml` passed (started like the Unraid template - volumes, no `NODE_ENV` -, QuickShop 2 acceptance test, restart, persistence, unprivileged server process, health check).
 
 ## Going back to the official image
 
