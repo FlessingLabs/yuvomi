@@ -106,6 +106,9 @@ export const PRIVATE_USER_COLUMNS = new Set([
   'health_vitals.user_id',
   'health_care_grants.caregiver_id',
   'health_care_grants.subject_id',
+  // Freigaben im Modulspeicher (Migration 275) - wie health_care_grants.
+  'module_person_grants.grantee_id',
+  'module_person_grants.subject_id',
   'medications.user_id',
   'cycle_day_logs.user_id',
   'cycle_periods.user_id',
@@ -344,6 +347,9 @@ function deactivate(database, userId) {
   // Konto betreuen, bleibt: dessen Daten stehen noch, und die Betreuenden sind
   // die, die sie noch lesen koennen.
   database.prepare('DELETE FROM health_care_grants WHERE caregiver_id = ?').run(userId);
+  // Dasselbe fuer Freigaben im Modulspeicher (Migration 275): wer geht, pflegt
+  // keine fremden Plaene mehr; die Daten der Person selbst bleiben.
+  database.prepare('DELETE FROM module_person_grants WHERE grantee_id = ?').run(userId);
 
   // NICHTS WIRD MEHR ZUGESTELLT.
   database.prepare('DELETE FROM push_subscriptions WHERE user_id = ?').run(userId);

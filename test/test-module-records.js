@@ -117,6 +117,11 @@ const writer = await addMember('writer');
 const reader = await addMember('reader', { 'ext:alpha-mod': 'read' });
 const blocked = await addMember('blocked', { 'ext:alpha-mod': 'none' });
 const guest = await addMember('guest');
+// Fuer die personenbezogenen Datensaetze (Migration 275).
+const kid = await addMember('kid');
+const parent = await addMember('parent');
+const watcher = await addMember('watcher');
+const stranger = await addMember('stranger');
 db.get().prepare('INSERT INTO split_expense_guest_users (user_id) VALUES (?)').run(guest.id);
 
 const R = '/modules/alpha-mod/records';
@@ -346,17 +351,111 @@ test('removing a module keeps its records; only an explicit admin purge deletes 
   assert.ok((await admin('GET', R)).body.data.length > 0, 'other modules untouched');
 });
 
-test('backup and restore carry records and revisions', async () => {
+// --------------------------------------------------------------------------
+// Personenbezogene Datensaetze (Migration 275)
+// --------------------------------------------------------------------------
+
+const P = '/modules/alpha-mod';
+
+test('grants: only admins set them, only for active members, never for oneself', async () => {
+  assert.equal((await parent.call('PUT', `${P}/grants/${kid.id}`, { grants: [{ user_id: parent.id, access: 'write' }] })).status, 403);
+  assert.equal((await admin('PUT', `${P}/grants/${kid.id}`, { grants: [{ user_id: kid.id, access: 'read' }] })).body.reason, 'module_grants_invalid');
+  assert.equal((await admin('PUT', `${P}/grants/${kid.id}`, { grants: [{ user_id: parent.id, access: 'admin' }] })).body.reason, 'module_grants_invalid');
+  assert.equal((await admin('PUT', `${P}/grants/${guest.id}`, { grants: [] })).body.reason, 'module_person_invalid', 'a Shared-expenses guest is no household member');
+  assert.equal((await admin('PUT', `${P}/grants/999999`, { grants: [] })).body.reason, 'module_person_invalid');
+  const set = await admin('PUT', `${P}/grants/${kid.id}`, { grants: [{ user_id: parent.id, access: 'write' }, { user_id: watcher.id, access: 'read' }] });
+  assert.equal(set.status, 200);
+  assert.deepEqual(set.body.data, [{ user_id: parent.id, access: 'write' }, { user_id: watcher.id, access: 'read' }]);
+  assert.deepEqual((await admin('GET', `${P}/grants`)).body.data[kid.id], set.body.data);
+  assert.equal((await parent.call('GET', `${P}/grants`)).status, 403);
+});
+
+test('person records: who may create, read, change', async () => {
+  const byParent = await parent.call('POST', `${P}/records`, { subject_id: kid.id, data: { kind: 'plan', label: 'Schuljahr' } });
+  assert.equal(byParent.status, 201);
+  assert.equal(byParent.body.data.subject_id, kid.id);
+  const rec = byParent.body.data;
+
+  assert.equal((await watcher.call('POST', `${P}/records`, { subject_id: kid.id, data: {} })).body.reason, 'module_person_access_denied');
+  assert.equal((await kid.call('POST', `${P}/records`, { subject_id: kid.id, data: {} })).status, 403, 'a child reads its own plan but does not change it');
+  assert.equal((await stranger.call('POST', `${P}/records`, { subject_id: kid.id, data: {} })).status, 403);
+  assert.equal((await parent.call('POST', `${P}/records`, { subject_id: guest.id, data: {} })).body.reason, 'record_subject_invalid');
+
+  for (const who of [kid, watcher, parent]) assert.equal((await who.call('GET', `${P}/records/${rec.id}`)).status, 200);
+  const hidden = await stranger.call('GET', `${P}/records/${rec.id}`);
+  assert.equal(hidden.status, 404, 'for others the record does not exist');
+  assert.equal(hidden.body.reason, 'record_not_found');
+
+  assert.equal((await watcher.call('PUT', `${P}/records/${rec.id}`, { data: { x: 1 }, revision: 1 })).status, 403);
+  assert.equal((await kid.call('DELETE', `${P}/records/${rec.id}?revision=1`)).status, 403);
+  assert.equal((await stranger.call('PUT', `${P}/records/${rec.id}`, { data: {}, revision: 1 })).status, 404);
+  const moved = await parent.call('PUT', `${P}/records/${rec.id}`, { subject_id: watcher.id, data: {}, revision: 1 });
+  assert.equal(moved.body.reason, 'record_subject_immutable', 'a plan never moves to another person');
+  const ok = await parent.call('PUT', `${P}/records/${rec.id}`, { data: { kind: 'plan', label: 'Schuljahr 2026/27' }, revision: 1 });
+  assert.equal(ok.status, 200);
+  assert.equal(ok.body.data.subject_id, kid.id);
+});
+
+test('person records: lists show only what the viewer may read', async () => {
+  const own = await stranger.call('GET', `${P}/records`);
+  assert.ok(own.body.data.every((r) => r.subject_id === null), 'stranger sees household records only');
+  const kidList = await kid.call('GET', `${P}/records?subject_id=${kid.id}`);
+  assert.ok(kidList.body.data.length >= 1 && kidList.body.data.every((r) => r.subject_id === kid.id));
+  assert.equal((await stranger.call('GET', `${P}/records?subject_id=${kid.id}`)).body.data.length, 0);
+  assert.ok((await admin('GET', `${P}/records?subject_id=${kid.id}`)).body.data.length >= 1);
+  assert.ok((await admin('GET', `${P}/records?subject_id=none`)).body.data.every((r) => r.subject_id === null));
+  assert.equal((await admin('GET', `${P}/records?subject_id=abc`)).status, 400);
+});
+
+test('people: each viewer sees the persons they may read, with their right', async () => {
+  const byParent = (await parent.call('GET', `${P}/people`)).body.data;
+  assert.deepEqual(byParent.map((p) => [p.user_id, p.access]).sort(), [[kid.id, 'write'], [parent.id, 'read']].sort());
+  assert.equal(byParent.find((p) => p.user_id === kid.id).display_name, 'kid');
+  assert.deepEqual((await kid.call('GET', `${P}/people`)).body.data.map((p) => [p.user_id, p.access, p.self]), [[kid.id, 'read', true]]);
+  assert.ok((await admin('GET', `${P}/people`)).body.data.every((p) => p.access === 'write'));
+  assert.ok(!(await admin('GET', `${P}/people`)).body.data.some((p) => p.user_id === guest.id), 'guests are not people of the household');
+  assert.equal((await blocked.call('GET', `${P}/people`)).status, 403, 'ext:<id> none still closes everything');
+});
+
+test('person paths are scoped to ext:<id> for tokens', async () => {
+  assert.equal(moduleForPath('/modules/alpha-mod/people'), 'ext:alpha-mod');
+  assert.equal(moduleForPath('/modules/alpha-mod/grants/3'), 'ext:alpha-mod');
+  const other = issueToken('people-other', ['shopping:read']);
+  assert.equal((await other('GET', `${P}/people`)).status, 403);
+});
+
+test('removing a child keeps its plans; removing a parent ends their grants', async () => {
+  const before = (await admin('GET', `${P}/records?subject_id=${kid.id}`)).body.data.length;
+  const removedKid = await admin('DELETE', `/auth/users/${kid.id}`);
+  assert.equal(removedKid.status, 200);
+  assert.equal(removedKid.body.outcome, 'deactivated', 'records are a trace: the account is deactivated, not deleted');
+  assert.equal((await admin('GET', `${P}/records?subject_id=${kid.id}`)).body.data.length, before);
+  assert.ok(!(await admin('GET', `${P}/people`)).body.data.some((p) => p.user_id === kid.id), 'a former member is no longer offered');
+  assert.equal((await admin('POST', `${P}/records`, { subject_id: kid.id, data: {} })).body.reason, 'record_subject_invalid');
+
+  const removedParent = await admin('DELETE', `/auth/users/${parent.id}`);
+  assert.equal(removedParent.status, 200);
+  const grants = (await admin('GET', `${P}/grants`)).body.data[kid.id] ?? [];
+  assert.ok(!grants.some((g) => g.user_id === parent.id), 'a former member grants nothing');
+});
+
+test('backup and restore carry records, revisions, persons and grants', async () => {
   const store = createRecordStore(db.get());
   const row = store.create('backup-mod', { name: 'Gesichert' });
+  const personal = store.create('backup-mod', { name: 'Plan' }, { subjectId: writer.id });
+  db.get().prepare("INSERT INTO module_person_grants (module_id, subject_id, grantee_id, access) VALUES ('backup-mod', ?, 1, 'read')").run(writer.id);
   const file = path.join(MODULES_DIR, 'backup.db');
   await db.backupToFile(file);
+  db.get().prepare("DELETE FROM module_person_grants WHERE module_id = 'backup-mod'").run();
   store.replace('backup-mod', row.id, { name: 'Danach geaendert' }, 1);
   store.create('backup-mod', { name: 'Danach angelegt' });
   await db.restoreFromFile(file);
   const after = createRecordStore(db.get());
   assert.deepEqual(after.get('backup-mod', row.id), row);
-  assert.equal(after.list('backup-mod').data.length, 1);
+  assert.deepEqual(after.get('backup-mod', personal.id), personal, 'the person of a record survives a restore');
+  assert.equal(after.list('backup-mod').data.length, 2);
+  const grant = db.get().prepare("SELECT access FROM module_person_grants WHERE module_id = 'backup-mod' AND subject_id = ?").get(writer.id);
+  assert.equal(grant?.access, 'read', 'grants are part of the backup');
 });
 
 test('the rest of the API is unaffected', async () => {

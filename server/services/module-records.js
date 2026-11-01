@@ -46,6 +46,7 @@ function decode(row) {
   if (!row) return null;
   return {
     id: row.id,
+    subject_id: row.subject_id ?? null,
     revision: row.revision,
     data: JSON.parse(row.data),
     created_at: row.created_at,
@@ -104,11 +105,15 @@ export function createRecordStore(database, limits = LIMITS) {
     if (row.revision !== revision) throw storageError(409, 'record_conflict', 'The record was changed since you read it.');
   }
 
-  const create = database.transaction((moduleId, data) => {
+  // `subjectId` (Migration 275): die Person, der der Datensatz gehoert, oder
+  // null fuer haushaltsweit. Wer das darf, hat der Router vorher gefragt
+  // (services/module-people.js); hier steht nur, dass es danach fest bleibt.
+  const create = database.transaction((moduleId, data, subjectId) => {
     const json = encode(data);
     assertQuota(moduleId, json);
     const id = randomUUID();
-    database.prepare('INSERT INTO module_records (module_id, id, data) VALUES (?, ?, ?)').run(moduleId, id, json);
+    database.prepare('INSERT INTO module_records (module_id, id, data, subject_id) VALUES (?, ?, ?, ?)')
+      .run(moduleId, id, json, subjectId ?? null);
     return decode(selectOne.get(moduleId, id));
   });
 
@@ -137,22 +142,41 @@ export function createRecordStore(database, limits = LIMITS) {
       return decode(requireRow(moduleId, id));
     },
 
-    /** Stabile Reihenfolge nach Id; `next` ist die Id, nach der die naechste Seite beginnt. */
-    list(moduleId, { after = '', limit = PAGE_DEFAULT } = {}) {
+    /** Nur die Person eines Datensatzes, fuer die Rechtepruefung vor dem Zugriff. */
+    subjectOf(moduleId, id) {
+      return requireRow(moduleId, id).subject_id ?? null;
+    },
+
+    /**
+     * Stabile Reihenfolge nach Id; `next` ist die Id, nach der die naechste
+     * Seite beginnt. `readable`: null = alle Personen, sonst die Menge der
+     * Personen, deren Datensaetze der Anfragende lesen darf (haushaltsweite
+     * Datensaetze immer). `subject`: nur die Datensaetze dieser Person.
+     */
+    list(moduleId, { after = '', limit = PAGE_DEFAULT, readable = null, subject = undefined } = {}) {
       if (!Number.isInteger(limit) || limit < 1 || limit > PAGE_MAX
         || typeof after !== 'string' || (after !== '' && !RECORD_ID_RE.test(after))) {
         throw storageError(400, 'record_page_invalid', `limit must be 1 to ${PAGE_MAX}; after must be a record id.`);
       }
+      const where = ['module_id = ?', 'id > ?'];
+      const args = [moduleId, after];
+      if (readable !== null) {
+        const ids = [...readable];
+        where.push(`(subject_id IS NULL${ids.length ? ` OR subject_id IN (${ids.map(() => '?').join(', ')})` : ''})`);
+        args.push(...ids);
+      }
+      if (subject === null) where.push('subject_id IS NULL');
+      else if (subject !== undefined) { where.push('subject_id = ?'); args.push(subject); }
       const rows = database.prepare(
-        'SELECT * FROM module_records WHERE module_id = ? AND id > ? ORDER BY id LIMIT ?'
-      ).all(moduleId, after, limit + 1);
+        `SELECT * FROM module_records WHERE ${where.join(' AND ')} ORDER BY id LIMIT ?`
+      ).all(...args, limit + 1);
       return {
         data: rows.slice(0, limit).map(decode),
         next: rows.length > limit ? rows[limit - 1].id : null,
       };
     },
 
-    create: (moduleId, data) => create(moduleId, data),
+    create: (moduleId, data, { subjectId = null } = {}) => create(moduleId, data, subjectId),
     replace: (moduleId, id, data, revision) => replace(moduleId, id, data, parseRevision(revision)),
     remove: (moduleId, id, revision) => remove(moduleId, id, parseRevision(revision)),
 
@@ -170,9 +194,12 @@ export function createRecordStore(database, limits = LIMITS) {
       `).all();
     },
 
-    /** Endgueltig loeschen - der einzige Weg, auf dem Moduldaten verschwinden. */
+    /** Endgueltig loeschen - der einzige Weg, auf dem Moduldaten verschwinden. Freigaben gehen mit. */
     purge(moduleId) {
-      return database.prepare('DELETE FROM module_records WHERE module_id = ?').run(moduleId).changes;
+      return database.transaction(() => {
+        database.prepare('DELETE FROM module_person_grants WHERE module_id = ?').run(moduleId);
+        return database.prepare('DELETE FROM module_records WHERE module_id = ?').run(moduleId).changes;
+      })();
     },
   };
 }

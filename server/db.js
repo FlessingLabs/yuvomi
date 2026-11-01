@@ -11793,6 +11793,41 @@ const MIGRATIONS = [
       );
     `,
   },
+
+  {
+    version: 275,
+    description: 'Module storage: records that belong to one person, and per-person grants',
+    up: `
+      -- PERSONENBEZOGENE DATENSAETZE (Stundenplan eines Kindes). Ohne subject_id
+      -- bleibt ein Datensatz haushaltsweit wie bisher. Mit subject_id sieht ihn
+      -- nur, wer darf: ein Admin, die Person selbst (lesend) und wem ein Admin
+      -- es fuer GENAU dieses Modul und GENAU diese Person ausdruecklich gewaehrt
+      -- hat (module_person_grants). Keine Ableitung aus family_role - dieselbe
+      -- Begruendung wie bei health_care_grants (Migration 130, DECISIONS.md 1).
+      --
+      -- Der Fremdschluessel ohne ON DELETE ist Absicht: er macht den Datensatz
+      -- zu einer Spur des Kontos (services/user-removal.js). Wer Plaene hat,
+      -- wird beim Entfernen deaktiviert, nicht geloescht, und seine Daten
+      -- wandern nie zu jemand anderem - die Id wird nicht neu vergeben
+      -- (users.id ist AUTOINCREMENT) und subject_id ist nach dem Anlegen fest.
+      ALTER TABLE module_records ADD COLUMN subject_id INTEGER REFERENCES users(id);
+      CREATE INDEX IF NOT EXISTS idx_module_records_subject ON module_records(module_id, subject_id);
+
+      CREATE TABLE IF NOT EXISTS module_person_grants (
+        module_id  TEXT    NOT NULL,
+        subject_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        grantee_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        access     TEXT    NOT NULL CHECK (access IN ('read', 'write')),
+        created_at TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+        PRIMARY KEY (module_id, subject_id, grantee_id),
+        -- Die Person selbst liest ohnehin; eine Zeile fuer sich selbst waere
+        -- eine zweite Wahrheit ueber dasselbe Recht.
+        CHECK (subject_id <> grantee_id)
+      );
+      CREATE INDEX IF NOT EXISTS idx_module_person_grants_grantee
+        ON module_person_grants(module_id, grantee_id);
+    `,
+  },
 ];
 
 /**

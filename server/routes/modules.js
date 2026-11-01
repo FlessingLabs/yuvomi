@@ -11,6 +11,8 @@
 import express from 'express';
 import moduleRecordsRouter from './module-records.js';
 import moduleStorageRouter from './module-storage.js';
+import modulePeopleRouter from './module-people.js';
+import moduleGrantsRouter from './module-grants.js';
 import path from 'node:path';
 import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
 import { requireAdmin } from '../auth.js';
@@ -38,6 +40,8 @@ const router = express.Router();
 // verschluckt; feste Pfade wie `/assets/...` reicht der Speicher-Router weiter.
 router.use('/storage', moduleStorageRouter);
 router.use('/:moduleId/records', moduleRecordsRouter);
+router.use('/:moduleId/people', modulePeopleRouter);
+router.use('/:moduleId/grants', moduleGrantsRouter);
 const log = createLogger('Modules');
 
 // Installing a module downloads or unpacks up to 20 MB and writes it to disk.

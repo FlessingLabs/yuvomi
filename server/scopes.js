@@ -141,6 +141,9 @@ function requiredAccess(method) {
  */
 export const RESERVED_MODULE_SEGMENTS = Object.freeze(new Set(['assets', 'install', 'storage']));
 
+/** Die Pfade unter /modules/<id>/, die dem Modul `ext:<id>` gehoeren (Migrationen 274, 275). */
+export const MODULE_STORAGE_SEGMENTS = Object.freeze(new Set(['records', 'people', 'grants']));
+
 /**
  * Ermittelt den Modul-Schlüssel für einen /api/v1-Pfad (ohne führendes /api/v1).
  *
@@ -158,7 +161,8 @@ export const RESERVED_MODULE_SEGMENTS = Object.freeze(new Set(['assets', 'instal
 function moduleForPath(path) {
   const cleaned = String(path || '').replace(/^\/+/, '').toLowerCase();
   const parts = cleaned.split('/').filter(Boolean);
-  // MODULSPEICHER (Migration 274): /modules/<id>/records gehoert dem Modul
+  // MODULSPEICHER (Migrationen 274, 275): /modules/<id>/records (und /people,
+  // /grants) gehoert dem Modul
   // `ext:<id>`, nicht der Modulverwaltung - sonst bekaeme kein Token mit
   // `ext:<id>:read` je Zugang, und keines ohne ihn wuerde abgewiesen, weil
   // /modules selbst kein scopebares Modul ist. Die Segmente werden dekodiert
@@ -169,7 +173,7 @@ function moduleForPath(path) {
   // und die Route selbst antwortet jeder Sitzung mit 404.
   let decoded;
   try { decoded = cleaned.split('/').map(decodeURIComponent); } catch { return null; }
-  if (decoded[0] === 'modules' && decoded[2] === 'records'
+  if (decoded[0] === 'modules' && MODULE_STORAGE_SEGMENTS.has(decoded[2])
     && !RESERVED_MODULE_SEGMENTS.has(decoded[1])) {
     const key = `ext:${decoded[1]}`;
     return MODULE_KEY_SET.has(key) ? key : null;

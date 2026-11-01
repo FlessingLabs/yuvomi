@@ -841,6 +841,10 @@ const REASONS_WITHOUT_SENTENCE = new Set([
   // Je Aufruf ein anderes Modul und ein anderes Recht - ein Satz fuer alle
   // braeuchte den Modulnamen aus der Antwort.
   'cross_module_access',
+  // Modulspeicher, personenbezogene Datensaetze (Migration 275): nur Modulseiten
+  // rufen diese Routen, und die Seite liest den Grund selbst (sie zeigt dann den
+  // Plan nur zum Lesen) - die App-Oberflaeche kommt hier nie vorbei.
+  'module_person_access_denied',
   // Anmeldung und Einrichtung: die Seiten zeigen den Servertext oder lesen ihn
   // per Muster (login.js: "password login is disabled").
   'account_cannot_sign_in', 'password_login_disabled', 'setup_completed', 'required',

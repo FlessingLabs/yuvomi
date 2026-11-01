@@ -52,7 +52,7 @@ function installResponses(extra = {}) {
 
 // Modulspeicher (Migration 274, routes/module-records.js). Ein Satz fuer alle
 // Operationen, damit Grenzen und Lebensdauer an jeder dasselbe sagen.
-const RECORDS_NOTE = `Small household-shared JSON records owned by an installed, enabled third-party module that declares \`capabilities.permissions.module\`. Access follows the module's \`ext:<moduleId>\` permission (read for GET, write otherwise); scoped API tokens need \`ext:<moduleId>:read\` or \`:write\`; paired displays and Shared-expenses guests have no access. A disabled, errored or removed module answers 404 \`module_storage_unavailable\`, but its records are kept until an admin deletes them with DELETE /api/v1/modules/{moduleId}/records. The content is opaque to Yuvomi: one JSON object of at most ${LIMITS.recordBytes} bytes per record, at most ${LIMITS.records} records and ${LIMITS.totalBytes} bytes per module (413 \`record_too_large\` / \`module_storage_full\`). Not meant for secrets, files or models. Replace and delete take the revision the caller last read; a stale one answers 409 \`record_conflict\` and changes nothing.`;
+const RECORDS_NOTE = `Small household-shared JSON records owned by an installed, enabled third-party module that declares \`capabilities.permissions.module\`. Access follows the module's \`ext:<moduleId>\` permission (read for GET, write otherwise); scoped API tokens need \`ext:<moduleId>:read\` or \`:write\`; paired displays and Shared-expenses guests have no access. A disabled, errored or removed module answers 404 \`module_storage_unavailable\`, but its records are kept until an admin deletes them with DELETE /api/v1/modules/{moduleId}/records. The content is opaque to Yuvomi: one JSON object of at most ${LIMITS.recordBytes} bytes per record, at most ${LIMITS.records} records and ${LIMITS.totalBytes} bytes per module (413 \`record_too_large\` / \`module_storage_full\`). Not meant for secrets, files or models. Replace and delete take the revision the caller last read; a stale one answers 409 \`record_conflict\` and changes nothing. A record may belong to one person (\`subject_id\`, a household member): then only an admin, that person (read) and whoever an admin granted access for this module and this person (GET/PUT /api/v1/modules/{moduleId}/grants) can reach it; for anyone else it does not exist (404 \`record_not_found\`). A record without \`subject_id\` is household-wide.`;
 
 function mcpExcluded(operation) {
   operation[MCP_EXCLUDE] = true;
@@ -64,6 +64,7 @@ function recordSchema() {
     type: 'object',
     properties: {
       id: { type: 'string', format: 'uuid', description: 'Server-generated record id' },
+      subject_id: { type: ['integer', 'null'], description: 'The household member this record belongs to; null for household-wide. Fixed once created.' },
       revision: { type: 'integer', minimum: 1, description: 'Starts at 1 and grows by one with every replace' },
       data: { type: 'object', additionalProperties: true, description: 'The JSON object the module stored' },
       created_at: { type: 'string', format: 'date-time' },
@@ -98,6 +99,7 @@ const RECORD_WRITE_BODY = {
     properties: {
       data: { type: 'object', additionalProperties: true },
       revision: { type: 'integer', minimum: 1, description: 'Replace only: the revision last read' },
+      subject_id: { type: ['integer', 'null'], description: 'Create only: the household member the record belongs to. On replace it may be sent but must not change (400 `record_subject_immutable`).' },
     },
     required: ['data'],
   } } },
@@ -135,6 +137,7 @@ function recordsPaths() {
           moduleParam,
           { name: 'limit', in: 'query', required: false, schema: { type: 'integer', minimum: 1, maximum: PAGE_MAX } },
           { name: 'after', in: 'query', required: false, schema: { type: 'string', format: 'uuid' } },
+          { name: 'subject_id', in: 'query', required: false, description: 'Only the records of this person, or `none` for household-wide records. Records of persons the caller may not read are never listed.', schema: { type: 'string' } },
         ],
         responses: recordsCommonResponses({
           200: {
@@ -151,7 +154,7 @@ function recordsPaths() {
         summary: 'Create a module record',
         tag: 'Modules',
         stateChanging: true,
-        description: `${RECORDS_NOTE} The server assigns the id and revision 1.`,
+        description: `${RECORDS_NOTE} The server assigns the id and revision 1. With \`subject_id\` the caller needs write access to that person: 400 \`record_subject_invalid\` when it is not an active household member, 403 \`module_person_access_denied\` without access.`,
         params: [moduleParam],
         requestBody: RECORD_WRITE_BODY,
         responses: recordsCommonResponses({
@@ -183,6 +186,64 @@ function recordsPaths() {
         },
       })),
     },
+    '/api/v1/modules/{moduleId}/people': {
+      get: op({
+        summary: 'Persons whose module records the caller may read',
+        tag: 'Modules',
+        description: 'Active household members (no staff, guests or displays) whose person records in this module the caller may read, with `access` (`read` or `write`) and `self`. An admin gets every member with `write`; a member gets themselves (`read`) and every person an admin granted them access to. Same module gate as the records: 404 `module_storage_unavailable`, 403 `module_access_denied`.',
+        params: [moduleParam],
+        responses: {
+          200: {
+            description: 'Persons',
+            content: { 'application/json': { schema: { type: 'object', properties: { data: { type: 'array', items: { type: 'object', properties: {
+              user_id: { type: 'integer' }, display_name: { type: 'string' }, avatar_color: { type: ['string', 'null'] },
+              family_role: { type: 'string' }, access: { type: 'string', enum: ['read', 'write'] }, self: { type: 'boolean' },
+            }, required: ['user_id', 'display_name', 'access', 'self'] } } }, required: ['data'] } } },
+          },
+          401: { $ref: '#/components/responses/Unauthorized' },
+          403: { description: 'No access to this module (`module_access_denied`)' },
+          404: { description: 'Module storage unavailable (`module_storage_unavailable`)' },
+          500: { $ref: '#/components/responses/InternalServerError' },
+        },
+      }),
+    },
+    '/api/v1/modules/{moduleId}/grants': {
+      get: op({
+        summary: 'Per-person grants of a module',
+        tag: 'Modules',
+        admin: true,
+        description: 'Who may read or maintain the person records of whom in this module: `{ <subjectId>: [{ user_id, access }] }`. Admin only (403 `module_access_denied`). Grants are set per module and per person by an admin; nothing is derived from family roles. Same module gate as the records (404 `module_storage_unavailable`).',
+        params: [moduleParam],
+        responses: {
+          200: { description: 'Grants per person', content: { 'application/json': { schema: { type: 'object', properties: { data: { type: 'object', additionalProperties: true } }, required: ['data'] } } } },
+          401: { $ref: '#/components/responses/Unauthorized' },
+          403: { description: 'Not an admin (`module_access_denied`)' },
+          404: { description: 'Module storage unavailable (`module_storage_unavailable`)' },
+          500: { $ref: '#/components/responses/InternalServerError' },
+        },
+      }),
+    },
+    '/api/v1/modules/{moduleId}/grants/{subjectId}': {
+      put: op({
+        summary: 'Replace the grants for one person',
+        tag: 'Modules',
+        admin: true,
+        stateChanging: true,
+        description: 'Replaces who may read (`read`) or maintain (`write`) the records of this person in this module. An empty list removes every grant. Every grantee must be an active household member other than the person (400 `module_grants_invalid`); the person must be an active household member (400 `module_person_invalid`). Admin only (403 `module_access_denied`). Same module gate as the records (404 `module_storage_unavailable`). Grants end when the grantee is removed from the household.',
+        params: [moduleParam, stringPathParam('subjectId', 'User id of the person')],
+        requestBody: { required: true, description: 'The new grants', content: { 'application/json': { schema: { type: 'object', properties: { grants: { type: 'array', items: { type: 'object', properties: {
+          user_id: { type: 'integer' }, access: { type: 'string', enum: ['read', 'write'] },
+        }, required: ['user_id', 'access'] } } }, required: ['grants'] } } } },
+        responses: {
+          200: { description: 'The grants now in place for this person', content: { 'application/json': { schema: { type: 'object', properties: { data: { type: 'array', items: { type: 'object', additionalProperties: true } } }, required: ['data'] } } } },
+          400: { description: 'Invalid person (`module_person_invalid`) or grants (`module_grants_invalid`)' },
+          401: { $ref: '#/components/responses/Unauthorized' },
+          403: { description: 'Not an admin (`module_access_denied`)' },
+          404: { description: 'Module storage unavailable (`module_storage_unavailable`)' },
+          500: { $ref: '#/components/responses/InternalServerError' },
+        },
+      }),
+    },
     '/api/v1/modules/{moduleId}/records/{recordId}': {
       get: op({
         summary: 'Get a module record',
@@ -195,7 +256,7 @@ function recordsPaths() {
         summary: 'Replace a module record',
         tag: 'Modules',
         stateChanging: true,
-        description: `${RECORDS_NOTE} \`revision\` is required (400 \`record_revision_required\`); the answer carries the new revision.`,
+        description: `${RECORDS_NOTE} \`revision\` is required (400 \`record_revision_required\`); the answer carries the new revision. A record of a person the caller may only read answers 403 \`module_person_access_denied\`; the person cannot change (400 \`record_subject_immutable\`).`,
         params: [moduleParam, recordParam],
         requestBody: RECORD_WRITE_BODY,
         responses: recordsCommonResponses({
@@ -209,7 +270,7 @@ function recordsPaths() {
         summary: 'Delete a module record',
         tag: 'Modules',
         stateChanging: true,
-        description: `${RECORDS_NOTE} The revision goes in the body (\`{ "revision": 3 }\`) or in the query (\`?revision=3\`); it is required (400 \`record_revision_required\`).`,
+        description: `${RECORDS_NOTE} The revision goes in the body (\`{ "revision": 3 }\`) or in the query (\`?revision=3\`); it is required (400 \`record_revision_required\`). A record of a person the caller may only read answers 403 \`module_person_access_denied\`.`,
         params: [moduleParam, recordParam, { name: 'revision', in: 'query', required: false, schema: { type: 'integer', minimum: 1 } }],
         responses: recordsCommonResponses({
           200: {
