@@ -42,6 +42,10 @@ env:
 
 jobs:
   build-and-push:
+    # Nur im Original. Ein Fork (z. B. FlessingLabs/yuvomi) veroeffentlicht
+    # sonst bei jedem Push auf main ein Image unter seinem Namen und dem
+    # Legacy-Spiegel `oikos`, bzw. oeffnet PRs an den Umbrel-Katalog.
+    if: github.repository == 'ulsklyc/yuvomi'
     name: Build & Push Image
     runs-on: ubuntu-latest
     # Gemessene Laufzeit 0.7-3.1 min, kein absichtliches Warten im Job -

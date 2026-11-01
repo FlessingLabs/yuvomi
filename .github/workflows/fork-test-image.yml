@@ -1,0 +1,115 @@
+name: Fork Test Image (module storage)
+
+# NUR IM FLESSINGLABS-FORK. Baut aus `feat/module-storage` ein TEST-Image,
+# prueft es als laufenden Container (mit QuickShop 2 aus
+# FlessingLabs/yuvomi-quickshop@feat/core-storage) und veroeffentlicht es erst
+# danach - unter eigenen Tags, nie `latest`, nie eine Versionsnummer, nie unter
+# dem offiziellen Namen ghcr.io/ulsklyc/yuvomi oder dem Legacy-Spiegel `oikos`:
+#
+#   ghcr.io/flessinglabs/yuvomi:module-storage-test      (wandert mit dem Branch)
+#   ghcr.io/flessinglabs/yuvomi:module-storage-<sha7>     (fest, fuer Unraid zum Anheften)
+#
+# Im Original-Repository laeuft dieser Workflow nicht (`if:` am Job), und der
+# Branch-Filter haelt ihn von `main` fern.
+
+on:
+  push:
+    branches: [feat/module-storage]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE: ghcr.io/flessinglabs/yuvomi
+
+jobs:
+  container-test:
+    name: Container test with QuickShop 2
+    if: github.repository == 'FlessingLabs/yuvomi'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: FlessingLabs/yuvomi-quickshop
+          ref: feat/core-storage
+          path: quickshop
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - name: Build the image (amd64, local)
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          load: true
+          push: false
+          tags: yuvomi-module-storage:ci
+          build-args: |
+            APP_BUILD_REVISION=${{ github.sha }}
+      - name: Start the container like an Unraid install (volumes, non-root files)
+        run: |
+          mkdir -p ci/data ci/backups ci/modules
+          cp -r quickshop/module ci/modules/flessinglabs-quickshop
+          docker run -d --name yuvomi -p 3000:3000 \
+            -e SESSION_SECRET=ci-only-session-secret-0123456789abcdefghijkl \
+            -e SESSION_SECURE=false -e TRUST_PROXY=loopback -e TZ=Europe/Berlin \
+            -v "$PWD/ci/data:/data" -v "$PWD/ci/backups:/backups" -v "$PWD/ci/modules:/app/modules" \
+            yuvomi-module-storage:ci
+          for i in $(seq 1 60); do curl -sf http://127.0.0.1:3000/health && break; sleep 2; done
+          docker logs yuvomi 2>&1 | grep -F "Migration 274 applied"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - name: QuickShop 2 acceptance test against the container
+        run: node quickshop/tools/e2e/e2e-core-storage.mjs setup --base http://127.0.0.1:3000
+      - name: Restart the container, the catalogue is still there
+        run: |
+          docker restart yuvomi
+          for i in $(seq 1 60); do curl -sf http://127.0.0.1:3000/health && break; sleep 2; done
+          node quickshop/tools/e2e/e2e-core-storage.mjs persist --base http://127.0.0.1:3000
+      - name: The process runs unprivileged and the healthcheck passes
+        run: |
+          uid=$(docker exec yuvomi sh -c "awk '/^Uid:/ {print \$2}' /proc/1/status")
+          echo "uid of the server process: $uid"; test "$uid" != "0"
+          for i in $(seq 1 30); do s=$(docker inspect -f '{{.State.Health.Status}}' yuvomi); [ "$s" = healthy ] && break; sleep 3; done
+          echo "health: $s"; test "$s" = healthy
+      - name: Container log
+        if: always()
+        run: docker logs yuvomi 2>&1 | tail -n 200
+
+  publish:
+    name: Publish the test image
+    needs: container-test
+    if: github.repository == 'FlessingLabs/yuvomi'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4.7.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: meta
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
+        with:
+          images: ${{ env.IMAGE }}
+          flavor: latest=false
+          tags: |
+            type=raw,value=module-storage-test
+            type=sha,prefix=module-storage-,format=short
+          labels: |
+            org.opencontainers.image.title=Yuvomi (FlessingLabs test build with module storage)
+            org.opencontainers.image.description=Unofficial test build of Yuvomi with core module storage. Not an official Yuvomi release.
+      - uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4.4.0
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            APP_BUILD_REVISION=${{ github.sha }}

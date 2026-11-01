@@ -52,6 +52,10 @@ concurrency:
 
 jobs:
   publish:
+    # Nur im Original. Ein Fork (z. B. FlessingLabs/yuvomi) veroeffentlicht
+    # sonst bei jedem Push auf main ein Image unter seinem Namen und dem
+    # Legacy-Spiegel `oikos`, bzw. oeffnet PRs an den Umbrel-Katalog.
+    if: github.repository == 'ulsklyc/yuvomi'
     runs-on: ubuntu-latest
     # 30 statt der 15, mit denen dieser Deckel zuerst dastand: der
     # Digest-Schritt wartet ABSICHTLICH bis zu 20 Minuten auf das
