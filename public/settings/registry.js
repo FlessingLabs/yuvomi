@@ -199,6 +199,22 @@ export const SETTINGS_SECTIONS = freezeEntries([
     loader: () => import('/settings/pages/notifications.js'),
   },
   {
+    // Telegram und Discord als Vorlagen des Webhook-Kanals (#692), eigene
+    // Ziele mit Freigabe und die Tagesvorschau (Migration 276). Jedes Mitglied
+    // sieht das Blatt; was es darf, sagt der Server.
+    id: 'personal-messenger',
+    sheetId: 'personal-messenger',
+    scope: 'mine',
+    labelKey: 'settings.pageMessenger',
+    descriptionKey: 'settings.pageMessengerDescription',
+    options: [
+      { key: 'settings.messenger.mineTitle', terms: ['Telegram', 'Discord'] },
+      'settings.messenger.digestTitle',
+    ],
+    adminOnly: false,
+    loader: () => import('/settings/pages/messenger.js'),
+  },
+  {
     id: 'personal-weather',
     sheetId: 'personal-weather',
     scope: 'mine',
@@ -775,6 +791,7 @@ export const SETTINGS_LEAVES = freezeEntries([
   { id: 'personal-appearance', domainId: 'personal', path: '/settings/personal/appearance', labelKey: 'settings.pageAppearance', descriptionKey: 'settings.pageAppearanceDescription', icon: 'palette' },
   { id: 'personal-device', domainId: 'personal', path: '/settings/personal/device', labelKey: 'settings.pageDevice', descriptionKey: 'settings.pageDeviceDescription', icon: 'smartphone' },
   { id: 'personal-notifications', domainId: 'personal', path: '/settings/personal/notifications', labelKey: 'settings.pageNotifications', descriptionKey: 'settings.pageNotificationsDescription', icon: 'bell' },
+  { id: 'personal-messenger', domainId: 'personal', path: '/settings/personal/messenger', labelKey: 'settings.pageMessenger', descriptionKey: 'settings.pageMessengerDescription', icon: 'send' },
   { id: 'personal-weather', domainId: 'personal', path: '/settings/personal/weather', labelKey: 'settings.pageWeather', descriptionKey: 'settings.pageWeatherDescription', icon: 'cloud-sun' },
   // Haushalt
   { id: 'admin-family', domainId: 'admin', path: '/settings/admin/family', labelKey: 'settings.pageFamilyRoles', descriptionKey: 'settings.pageFamilyRolesDescription', icon: 'users' },

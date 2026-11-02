@@ -3802,7 +3802,39 @@
         "memberRemoveLastAdmin": "يجب أن يبقى مسؤول واحد على الأقل.",
         "memberRemoveLastSsoAdmin": "هذا آخر مسؤول مرتبط بـ SSO. اربط مسؤولًا آخر أولًا.",
         "backupWebdavUrlInvalid": "يجب أن يبدأ العنوان بـ http:// أو https://.",
-        "icsSubscriptionGone": "هذا الاشتراك لم يعد موجودًا."
+        "icsSubscriptionGone": "هذا الاشتراك لم يعد موجودًا.",
+        "pageMessenger": "المراسلة",
+        "pageMessengerDescription": "إعداد تيليجرام وديسكورد، ومعاينة يومك أيضًا.",
+        "messenger": {
+            "mineTitle": "وجهاتي",
+            "mineHint": "تصل التذكيرات ومعاينة يومك أيضًا إلى هذه الوجهات.",
+            "notAllowed": "يمكن للمسؤول أن يسمح لك بإعداد وجهات خاصة بك.",
+            "empty": "لم يتم إعداد أي وجهة بعد.",
+            "service": "الخدمة",
+            "telegramToken": "رمز البوت",
+            "telegramTokenHint": "من @BotFather، يشبه 123456789:AA...",
+            "telegramChat": "معرّف المحادثة",
+            "telegramChatHint": "معرّف محادثتك أو معرّف مجموعة. راسل البوت مرة أولًا.",
+            "discordUrl": "عنوان الويب هوك",
+            "discordUrlHint": "في ديسكورد: تعديل القناة، التكاملات، Webhooks، نسخ رابط الويب هوك.",
+            "testFailed": "فشل الإرسال: {{error}}",
+            "digestTitle": "معاينة يومي",
+            "digestEnabled": "إرسال معاينة اليوم",
+            "digestTime": "الوقت",
+            "digestDay": "المعاينة ليوم",
+            "digestSections": "المحتوى",
+            "digestSectionsHint": "تظهر أعياد الميلاد في كل معاينة قبل أسبوع.",
+            "digestTargets": "الإرسال إلى",
+            "digestTargetsHint": "عدم اختيار شيء يعني: إلى كل الوجهات.",
+            "digestTest": "اختبار الآن",
+            "digestSaved": "تم الحفظ.",
+            "accessTitle": "من يمكنه إعداد وجهات خاصة به",
+            "accessHint": "يمكن للمسؤولين دائمًا.",
+            "householdTitle": "وجهات العائلة",
+            "householdHint": "مثلًا مجموعة تيليجرام. تصل إلى هنا التذكيرات التي يراها الجميع.",
+            "householdDigestTitle": "معاينة العائلة",
+            "householdDigestHint": "تصل إلى وجهات العائلة ولا تعرض إلا ما يراه الجميع."
+        }
     },
     "login": {
         "tagline": "مرحبًا بعودتك. منزلك في مكان واحد.",
@@ -7288,5 +7320,22 @@
         "custom": "لون مخصص",
         "chooseCustom": "اختر لونًا مخصصًا",
         "standard": "اللون الافتراضي"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "اليوم، {{date}}",
+            "titleTomorrow": "غدًا، {{date}}",
+            "allDay": "طوال اليوم",
+            "birthdayToday": "اليوم",
+            "nameDay": "يوم الاسم",
+            "nothing": "لا شيء مجدول.",
+            "section": {
+                "events": "المواعيد",
+                "tasks": "المهام",
+                "birthdays": "أعياد الميلاد",
+                "waste": "جمع النفايات",
+                "shopping": "قائمة التسوق"
+            }
+        }
     }
 }

@@ -3462,7 +3462,39 @@
         "memberRemoveLastAdmin": "At least one administrator must remain.",
         "memberRemoveLastSsoAdmin": "This is the last administrator linked to SSO. Link another administrator first.",
         "backupWebdavUrlInvalid": "The address must start with http:// or https://.",
-        "icsSubscriptionGone": "This subscription no longer exists."
+        "icsSubscriptionGone": "This subscription no longer exists.",
+        "pageMessenger": "Messenger",
+        "pageMessengerDescription": "Set up Telegram and Discord, plus your daily preview.",
+        "messenger": {
+            "mineTitle": "My targets",
+            "mineHint": "Reminders and your daily preview also go to these targets.",
+            "notAllowed": "An admin can allow you to set up your own targets.",
+            "empty": "No target set up yet.",
+            "service": "Service",
+            "telegramToken": "Bot token",
+            "telegramTokenHint": "From @BotFather, looks like 123456789:AA...",
+            "telegramChat": "Chat ID",
+            "telegramChatHint": "Your chat ID or a group's. Message the bot once first.",
+            "discordUrl": "Webhook address",
+            "discordUrlHint": "In Discord: edit channel, Integrations, Webhooks, Copy Webhook URL.",
+            "testFailed": "Sending failed: {{error}}",
+            "digestTitle": "My daily preview",
+            "digestEnabled": "Send daily preview",
+            "digestTime": "Time",
+            "digestDay": "Preview for",
+            "digestSections": "Content",
+            "digestSectionsHint": "Birthdays appear in every preview from one week ahead.",
+            "digestTargets": "Send to",
+            "digestTargetsHint": "Nothing selected means: to all targets.",
+            "digestTest": "Test now",
+            "digestSaved": "Saved.",
+            "accessTitle": "Who may set up their own targets",
+            "accessHint": "Admins always may.",
+            "householdTitle": "Family targets",
+            "householdHint": "For example a Telegram group. Reminders everyone may see go here.",
+            "householdDigestTitle": "Family preview",
+            "householdDigestHint": "Goes to the family targets and shows only what everyone may see."
+        }
     },
     "login": {
         "tagline": "Welcome back. Your home in one place.",
@@ -6777,5 +6809,22 @@
         "custom": "Custom color",
         "chooseCustom": "Choose a custom color",
         "standard": "Default color"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "Today, {{date}}",
+            "titleTomorrow": "Tomorrow, {{date}}",
+            "allDay": "all day",
+            "birthdayToday": "today",
+            "nameDay": "name day",
+            "nothing": "Nothing scheduled.",
+            "section": {
+                "events": "Events",
+                "tasks": "Tasks",
+                "birthdays": "Birthdays",
+                "waste": "Waste collection",
+                "shopping": "Shopping list"
+            }
+        }
     }
 }

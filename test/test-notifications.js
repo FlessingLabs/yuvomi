@@ -206,6 +206,9 @@ function makeDb({ withNotificationTables = true } = {}) {
   `);
   if (withNotificationTables) {
     db.exec(notificationMigration().up);
+    // Freigabe eigener Ziele und Tagesvorschau (Migration 276): der Versand an
+    // persoenliche Kanaele fragt die Freigabe.
+    db.exec(MIGRATIONS.find((m) => m.version === 276).up);
   }
   db.prepare("INSERT INTO users (id, username, role) VALUES (1, 'alice', 'admin'), (2, 'bob', 'member')").run();
   return db;

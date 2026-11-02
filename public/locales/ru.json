@@ -3688,7 +3688,39 @@
         "memberRemoveLastAdmin": "Должен остаться хотя бы один администратор.",
         "memberRemoveLastSsoAdmin": "Это последний администратор, связанный с SSO. Сначала свяжите другого администратора.",
         "backupWebdavUrlInvalid": "Адрес должен начинаться с http:// или https://.",
-        "icsSubscriptionGone": "Этой подписки больше нет."
+        "icsSubscriptionGone": "Этой подписки больше нет.",
+        "pageMessenger": "Мессенджеры",
+        "pageMessengerDescription": "Настройте Telegram и Discord, а также обзор дня.",
+        "messenger": {
+            "mineTitle": "Мои получатели",
+            "mineHint": "Напоминания и ваш обзор дня также приходят этим получателям.",
+            "notAllowed": "Админ может разрешить вам настроить своих получателей.",
+            "empty": "Получатели ещё не настроены.",
+            "service": "Сервис",
+            "telegramToken": "Токен бота",
+            "telegramTokenHint": "От @BotFather, выглядит как 123456789:AA...",
+            "telegramChat": "ID чата",
+            "telegramChatHint": "Ваш ID чата или ID группы. Сначала один раз напишите боту.",
+            "discordUrl": "Адрес вебхука",
+            "discordUrlHint": "В Discord: изменить канал, Интеграция, Вебхуки, Копировать URL вебхука.",
+            "testFailed": "Не удалось отправить: {{error}}",
+            "digestTitle": "Мой обзор дня",
+            "digestEnabled": "Отправлять обзор дня",
+            "digestTime": "Время",
+            "digestDay": "Обзор на",
+            "digestSections": "Содержание",
+            "digestSectionsHint": "Дни рождения появляются в каждом обзоре за неделю.",
+            "digestTargets": "Отправлять",
+            "digestTargetsHint": "Ничего не выбрано означает: всем получателям.",
+            "digestTest": "Проверить сейчас",
+            "digestSaved": "Сохранено.",
+            "accessTitle": "Кто может настраивать своих получателей",
+            "accessHint": "Админы могут всегда.",
+            "householdTitle": "Получатели семьи",
+            "householdHint": "Например, группа в Telegram. Сюда приходят напоминания, которые видят все.",
+            "householdDigestTitle": "Семейный обзор",
+            "householdDigestHint": "Приходит получателям семьи и показывает только то, что видят все."
+        }
     },
     "login": {
         "tagline": "С возвращением. Ваш дом - в одном месте.",
@@ -7117,5 +7149,22 @@
         "custom": "Свой цвет",
         "chooseCustom": "Выбрать свой цвет",
         "standard": "Цвет по умолчанию"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "Сегодня, {{date}}",
+            "titleTomorrow": "Завтра, {{date}}",
+            "allDay": "весь день",
+            "birthdayToday": "сегодня",
+            "nameDay": "именины",
+            "nothing": "Ничего не запланировано.",
+            "section": {
+                "events": "События",
+                "tasks": "Задачи",
+                "birthdays": "Дни рождения",
+                "waste": "Вывоз мусора",
+                "shopping": "Список покупок"
+            }
+        }
     }
 }

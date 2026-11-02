@@ -3462,7 +3462,39 @@
         "memberRemoveLastAdmin": "Legalább egy rendszergazdának maradnia kell.",
         "memberRemoveLastSsoAdmin": "Ez az utolsó SSO-hoz kapcsolt rendszergazda. Először kapcsoljon egy másik rendszergazdát.",
         "backupWebdavUrlInvalid": "A címnek http:// vagy https:// előtaggal kell kezdődnie.",
-        "icsSubscriptionGone": "Ez az előfizetés már nem létezik."
+        "icsSubscriptionGone": "Ez az előfizetés már nem létezik.",
+        "pageMessenger": "Üzenetküldők",
+        "pageMessengerDescription": "Telegram és Discord beállítása, valamint a napi előnézeted.",
+        "messenger": {
+            "mineTitle": "Saját célok",
+            "mineHint": "Az emlékeztetők és a napi előnézeted ezekre a célokra is mennek.",
+            "notAllowed": "Egy admin engedélyezheti, hogy saját célokat állíts be.",
+            "empty": "Még nincs beállított cél.",
+            "service": "Szolgáltatás",
+            "telegramToken": "Bot token",
+            "telegramTokenHint": "A @BotFather-től, így néz ki: 123456789:AA...",
+            "telegramChat": "Csevegésazonosító",
+            "telegramChatHint": "A te csevegésazonosítód vagy egy csoporté. Előbb írj egyszer a botnak.",
+            "discordUrl": "Webhook címe",
+            "discordUrlHint": "Discordban: csatorna szerkesztése, Integrációk, Webhookok, Webhook URL másolása.",
+            "testFailed": "A küldés sikertelen: {{error}}",
+            "digestTitle": "Saját napi előnézet",
+            "digestEnabled": "Napi előnézet küldése",
+            "digestTime": "Időpont",
+            "digestDay": "Előnézet erre",
+            "digestSections": "Tartalom",
+            "digestSectionsHint": "A születésnapok egy héttel előre minden előnézetben megjelennek.",
+            "digestTargets": "Küldés ide",
+            "digestTargetsHint": "Ha semmi nincs kiválasztva: minden célra.",
+            "digestTest": "Tesztelés most",
+            "digestSaved": "Mentve.",
+            "accessTitle": "Ki állíthat be saját célokat",
+            "accessHint": "Az adminok mindig.",
+            "householdTitle": "A család céljai",
+            "householdHint": "Például egy Telegram-csoport. Ide mennek a mindenki által látható emlékeztetők.",
+            "householdDigestTitle": "Családi előnézet",
+            "householdDigestHint": "A család céljaira megy, és csak azt mutatja, amit mindenki láthat."
+        }
     },
     "login": {
         "tagline": "Üdv újra! Az otthon ügyei egy helyen.",
@@ -6777,5 +6809,22 @@
         "custom": "Saját szín",
         "chooseCustom": "Saját szín választása",
         "standard": "Alapértelmezett szín"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "Ma, {{date}}",
+            "titleTomorrow": "Holnap, {{date}}",
+            "allDay": "egész nap",
+            "birthdayToday": "ma",
+            "nameDay": "névnap",
+            "nothing": "Nincs semmi betervezve.",
+            "section": {
+                "events": "Események",
+                "tasks": "Feladatok",
+                "birthdays": "Születésnapok",
+                "waste": "Hulladékszállítás",
+                "shopping": "Bevásárlólista"
+            }
+        }
     }
 }

@@ -653,6 +653,7 @@ const PAGE_MODULES = [
   '/settings/pages/sync-contacts.js',
   '/settings/pages/sync-reminders.js',
   '/settings/pages/notifications.js',
+  '/settings/pages/messenger.js',
   '/settings/pages/documents-storage.js',
   '/settings/pages/documents-dms.js',
   '/settings/pages/admin-family.js',

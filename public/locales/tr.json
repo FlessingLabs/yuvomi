@@ -3462,7 +3462,39 @@
         "memberRemoveLastAdmin": "En az bir yönetici kalmalıdır.",
         "memberRemoveLastSsoAdmin": "Bu, SSO ile bağlantılı son yönetici. Önce başka bir yöneticiyi bağlayın.",
         "backupWebdavUrlInvalid": "Adres http:// veya https:// ile başlamalıdır.",
-        "icsSubscriptionGone": "Bu abonelik artık yok."
+        "icsSubscriptionGone": "Bu abonelik artık yok.",
+        "pageMessenger": "Mesajlaşma",
+        "pageMessengerDescription": "Telegram ve Discord ile günlük önizlemeni ayarla.",
+        "messenger": {
+            "mineTitle": "Hedeflerim",
+            "mineHint": "Hatırlatıcılar ve günlük önizlemen bu hedeflere de gider.",
+            "notAllowed": "Bir admin kendi hedeflerini kurmana izin verebilir.",
+            "empty": "Henüz hedef kurulmadı.",
+            "service": "Hizmet",
+            "telegramToken": "Bot belirteci",
+            "telegramTokenHint": "@BotFather'dan, 123456789:AA... gibi görünür",
+            "telegramChat": "Sohbet kimliği",
+            "telegramChatHint": "Senin sohbet kimliğin ya da bir grubun. Önce bota bir kez yaz.",
+            "discordUrl": "Webhook adresi",
+            "discordUrlHint": "Discord'da: kanalı düzenle, Entegrasyonlar, Webhook'lar, Webhook URL'sini kopyala.",
+            "testFailed": "Gönderilemedi: {{error}}",
+            "digestTitle": "Günlük önizlemem",
+            "digestEnabled": "Günlük önizleme gönder",
+            "digestTime": "Saat",
+            "digestDay": "Önizleme günü",
+            "digestSections": "İçerik",
+            "digestSectionsHint": "Doğum günleri bir hafta önceden her önizlemede görünür.",
+            "digestTargets": "Gönderilecek yer",
+            "digestTargetsHint": "Hiçbir şey seçilmezse: tüm hedeflere.",
+            "digestTest": "Şimdi test et",
+            "digestSaved": "Kaydedildi.",
+            "accessTitle": "Kimler kendi hedeflerini kurabilir",
+            "accessHint": "Admin'ler her zaman kurabilir.",
+            "householdTitle": "Ailenin hedefleri",
+            "householdHint": "Örneğin bir Telegram grubu. Herkesin görebileceği hatırlatıcılar buraya gelir.",
+            "householdDigestTitle": "Aile önizlemesi",
+            "householdDigestHint": "Ailenin hedeflerine gider ve yalnızca herkesin görebileceğini gösterir."
+        }
     },
     "login": {
         "tagline": "Tekrar hoş geldin. Evin tek bir yerde.",
@@ -6777,5 +6809,22 @@
         "custom": "Özel renk",
         "chooseCustom": "Özel renk seç",
         "standard": "Varsayılan renk"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "Bugün, {{date}}",
+            "titleTomorrow": "Yarın, {{date}}",
+            "allDay": "tüm gün",
+            "birthdayToday": "bugün",
+            "nameDay": "isim günü",
+            "nothing": "Planlanmış bir şey yok.",
+            "section": {
+                "events": "Etkinlikler",
+                "tasks": "Görevler",
+                "birthdays": "Doğum günleri",
+                "waste": "Çöp toplama",
+                "shopping": "Alışveriş listesi"
+            }
+        }
     }
 }

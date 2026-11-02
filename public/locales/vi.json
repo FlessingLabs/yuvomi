@@ -3462,7 +3462,39 @@
         "memberRemoveLastAdmin": "Phải còn lại ít nhất một quản trị viên.",
         "memberRemoveLastSsoAdmin": "Đây là quản trị viên cuối cùng được liên kết với SSO. Hãy liên kết một quản trị viên khác trước.",
         "backupWebdavUrlInvalid": "Địa chỉ phải bắt đầu bằng http:// hoặc https://.",
-        "icsSubscriptionGone": "Đăng ký này không còn tồn tại."
+        "icsSubscriptionGone": "Đăng ký này không còn tồn tại.",
+        "pageMessenger": "Nhắn tin",
+        "pageMessengerDescription": "Thiết lập Telegram và Discord, cùng bản xem trước trong ngày.",
+        "messenger": {
+            "mineTitle": "Điểm nhận của tôi",
+            "mineHint": "Lời nhắc và bản xem trước trong ngày của bạn cũng được gửi đến các điểm nhận này.",
+            "notAllowed": "Quản trị viên có thể cho phép bạn thiết lập điểm nhận riêng.",
+            "empty": "Chưa thiết lập điểm nhận nào.",
+            "service": "Dịch vụ",
+            "telegramToken": "Mã bot",
+            "telegramTokenHint": "Từ @BotFather, có dạng 123456789:AA...",
+            "telegramChat": "ID cuộc trò chuyện",
+            "telegramChatHint": "ID cuộc trò chuyện của bạn hoặc của một nhóm. Hãy nhắn cho bot một lần trước.",
+            "discordUrl": "Địa chỉ webhook",
+            "discordUrlHint": "Trong Discord: sửa kênh, Tích hợp, Webhook, Sao chép URL webhook.",
+            "testFailed": "Gửi không thành công: {{error}}",
+            "digestTitle": "Bản xem trước trong ngày của tôi",
+            "digestEnabled": "Gửi bản xem trước trong ngày",
+            "digestTime": "Giờ",
+            "digestDay": "Xem trước cho",
+            "digestSections": "Nội dung",
+            "digestSectionsHint": "Sinh nhật xuất hiện trong mọi bản xem trước từ một tuần trước.",
+            "digestTargets": "Gửi đến",
+            "digestTargetsHint": "Không chọn gì nghĩa là: gửi đến tất cả điểm nhận.",
+            "digestTest": "Thử ngay",
+            "digestSaved": "Đã lưu.",
+            "accessTitle": "Ai được thiết lập điểm nhận riêng",
+            "accessHint": "Quản trị viên luôn được phép.",
+            "householdTitle": "Điểm nhận của gia đình",
+            "householdHint": "Ví dụ một nhóm Telegram. Lời nhắc mọi người đều xem được sẽ đến đây.",
+            "householdDigestTitle": "Bản xem trước của gia đình",
+            "householdDigestHint": "Gửi đến điểm nhận của gia đình và chỉ hiện những gì mọi người đều xem được."
+        }
     },
     "login": {
         "tagline": "Chào mừng bạn trở lại. Ngôi nhà của bạn ở cùng một nơi.",
@@ -6777,5 +6809,22 @@
         "custom": "Màu tùy chỉnh",
         "chooseCustom": "Chọn màu tùy chỉnh",
         "standard": "Màu mặc định"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "Hôm nay, {{date}}",
+            "titleTomorrow": "Ngày mai, {{date}}",
+            "allDay": "cả ngày",
+            "birthdayToday": "hôm nay",
+            "nameDay": "ngày tên thánh",
+            "nothing": "Không có lịch nào.",
+            "section": {
+                "events": "Sự kiện",
+                "tasks": "Công việc",
+                "birthdays": "Sinh nhật",
+                "waste": "Thu gom rác",
+                "shopping": "Danh sách mua sắm"
+            }
+        }
     }
 }

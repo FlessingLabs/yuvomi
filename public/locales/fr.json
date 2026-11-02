@@ -3462,7 +3462,39 @@
         "memberRemoveLastAdmin": "Il doit rester au moins un administrateur.",
         "memberRemoveLastSsoAdmin": "C'est le dernier administrateur lié au SSO. Liez d'abord un autre administrateur.",
         "backupWebdavUrlInvalid": "L'adresse doit commencer par http:// ou https://.",
-        "icsSubscriptionGone": "Cet abonnement n'existe plus."
+        "icsSubscriptionGone": "Cet abonnement n'existe plus.",
+        "pageMessenger": "Messagerie",
+        "pageMessengerDescription": "Configurer Telegram et Discord, ainsi que votre aperçu du jour.",
+        "messenger": {
+            "mineTitle": "Mes destinations",
+            "mineHint": "Les rappels et votre aperçu du jour sont aussi envoyés à ces destinations.",
+            "notAllowed": "Un admin peut vous autoriser à configurer vos propres destinations.",
+            "empty": "Aucune destination configurée.",
+            "service": "Service",
+            "telegramToken": "Jeton du bot",
+            "telegramTokenHint": "Fourni par @BotFather, ressemble à 123456789:AA...",
+            "telegramChat": "ID de discussion",
+            "telegramChatHint": "Votre ID de discussion ou celui d'un groupe. Écrivez d'abord une fois au bot.",
+            "discordUrl": "Adresse du webhook",
+            "discordUrlHint": "Dans Discord : modifier le salon, Intégrations, Webhooks, Copier l’URL du webhook.",
+            "testFailed": "Échec de l'envoi : {{error}}",
+            "digestTitle": "Mon aperçu du jour",
+            "digestEnabled": "Envoyer l'aperçu du jour",
+            "digestTime": "Heure",
+            "digestDay": "Aperçu pour",
+            "digestSections": "Contenu",
+            "digestSectionsHint": "Les anniversaires figurent dans chaque aperçu dès une semaine avant.",
+            "digestTargets": "Envoyer à",
+            "digestTargetsHint": "Rien de sélectionné signifie : à toutes les destinations.",
+            "digestTest": "Tester maintenant",
+            "digestSaved": "Enregistré.",
+            "accessTitle": "Qui peut configurer ses propres destinations",
+            "accessHint": "Les admins le peuvent toujours.",
+            "householdTitle": "Destinations de la famille",
+            "householdHint": "Par exemple un groupe Telegram. Les rappels visibles par tous arrivent ici.",
+            "householdDigestTitle": "Aperçu familial",
+            "householdDigestHint": "Envoyé aux destinations de la famille, ne montre que ce que tout le monde peut voir."
+        }
     },
     "login": {
         "tagline": "Bon retour. Votre foyer, au même endroit.",
@@ -6777,5 +6809,22 @@
         "custom": "Couleur personnalisée",
         "chooseCustom": "Choisir une couleur personnalisée",
         "standard": "Couleur par défaut"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "Aujourd'hui, {{date}}",
+            "titleTomorrow": "Demain, {{date}}",
+            "allDay": "toute la journée",
+            "birthdayToday": "aujourd'hui",
+            "nameDay": "fête",
+            "nothing": "Rien de prévu.",
+            "section": {
+                "events": "Rendez-vous",
+                "tasks": "Tâches",
+                "birthdays": "Anniversaires",
+                "waste": "Collecte des déchets",
+                "shopping": "Liste de courses"
+            }
+        }
     }
 }

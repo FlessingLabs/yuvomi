@@ -3462,7 +3462,39 @@
         "memberRemoveLastAdmin": "कम से कम एक व्यवस्थापक रहना चाहिए।",
         "memberRemoveLastSsoAdmin": "यह SSO से जुड़ा अंतिम व्यवस्थापक है। पहले किसी दूसरे व्यवस्थापक को जोड़ें।",
         "backupWebdavUrlInvalid": "पता http:// या https:// से शुरू होना चाहिए।",
-        "icsSubscriptionGone": "यह सदस्यता अब मौजूद नहीं है।"
+        "icsSubscriptionGone": "यह सदस्यता अब मौजूद नहीं है।",
+        "pageMessenger": "मैसेंजर",
+        "pageMessengerDescription": "टेलीग्राम और डिस्कॉर्ड सेट करें, साथ में अपने दिन का पूर्वावलोकन।",
+        "messenger": {
+            "mineTitle": "मेरे गंतव्य",
+            "mineHint": "रिमाइंडर और आपके दिन का पूर्वावलोकन इन गंतव्यों पर भी जाते हैं।",
+            "notAllowed": "कोई एडमिन आपको अपने गंतव्य सेट करने की अनुमति दे सकता है।",
+            "empty": "अभी कोई गंतव्य सेट नहीं है।",
+            "service": "सेवा",
+            "telegramToken": "बॉट टोकन",
+            "telegramTokenHint": "@BotFather से, 123456789:AA... जैसा दिखता है",
+            "telegramChat": "चैट आईडी",
+            "telegramChatHint": "आपकी चैट आईडी या किसी समूह की। पहले बॉट को एक बार संदेश भेजें।",
+            "discordUrl": "वेबहुक पता",
+            "discordUrlHint": "डिस्कॉर्ड में: चैनल संपादित करें, इंटीग्रेशन, वेबहुक, वेबहुक URL कॉपी करें।",
+            "testFailed": "भेजना विफल: {{error}}",
+            "digestTitle": "मेरे दिन का पूर्वावलोकन",
+            "digestEnabled": "दिन का पूर्वावलोकन भेजें",
+            "digestTime": "समय",
+            "digestDay": "पूर्वावलोकन किस दिन का",
+            "digestSections": "सामग्री",
+            "digestSectionsHint": "जन्मदिन एक सप्ताह पहले से हर पूर्वावलोकन में दिखते हैं।",
+            "digestTargets": "यहाँ भेजें",
+            "digestTargetsHint": "कुछ न चुनने का अर्थ: सभी गंतव्यों पर।",
+            "digestTest": "अभी जाँचें",
+            "digestSaved": "सहेजा गया।",
+            "accessTitle": "कौन अपने गंतव्य सेट कर सकता है",
+            "accessHint": "एडमिन हमेशा कर सकते हैं।",
+            "householdTitle": "परिवार के गंतव्य",
+            "householdHint": "जैसे कोई टेलीग्राम समूह। सबको दिखने वाले रिमाइंडर यहाँ आते हैं।",
+            "householdDigestTitle": "परिवार का पूर्वावलोकन",
+            "householdDigestHint": "परिवार के गंतव्यों पर जाता है और केवल वही दिखाता है जो सब देख सकते हैं।"
+        }
     },
     "login": {
         "tagline": "फिर से स्वागत है। आपका घर, एक ही जगह।",
@@ -6777,5 +6809,22 @@
         "custom": "अपना रंग",
         "chooseCustom": "अपना रंग चुनें",
         "standard": "डिफ़ॉल्ट रंग"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "आज, {{date}}",
+            "titleTomorrow": "कल, {{date}}",
+            "allDay": "पूरे दिन",
+            "birthdayToday": "आज",
+            "nameDay": "नाम दिवस",
+            "nothing": "कुछ निर्धारित नहीं।",
+            "section": {
+                "events": "कार्यक्रम",
+                "tasks": "कार्य",
+                "birthdays": "जन्मदिन",
+                "waste": "कचरा संग्रह",
+                "shopping": "खरीदारी सूची"
+            }
+        }
     }
 }

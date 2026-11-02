@@ -92,6 +92,47 @@ Notes:
 - Leave the field empty to keep the default body. Existing webhook channels are
   unaffected.
 
+## Telegram and Discord presets
+
+Settings -> Messenger offers **Telegram** and **Discord** as presets of this
+same webhook channel; there is still no provider per service. A preset fills
+the address, the template and a length limit from a few fields:
+
+| Preset | You enter | Address | Body | Limit |
+|---|---|---|---|---|
+| `telegram` | bot token, chat ID | `https://api.telegram.org/bot{{token}}/sendMessage` | `{"chat_id": "<chat ID>", "text": "{{title}}\n\n{{body}}"}` | 4000 |
+| `discord` | the webhook URL | `https://discord.com/api/webhooks/{{token}}` | `{"content": "**{{title}}**\n{{body}}"}` | 1900 |
+
+Over the API: `{"provider": "webhook", "config": {"preset": "telegram", "chatId": "123456789"}, "secrets": {"token": "<bot token>"}}`.
+A pasted Discord URL is reduced to `<id>/<token>`; a Telegram token copied
+with its `bot` prefix is understood.
+
+### A token in the address
+
+Some services carry their key in the URL rather than in a header. Write
+`{{token}}` in the **path** of the address and put the value in the token
+field: it is stored write-only like any other secret and only inserted when a
+message is sent, so the key never appears in the channel list. With
+`{{token}}` in the address, no `Authorization` header is sent. The token may
+contain letters, digits and `: _ - / .` (no `..`); the placeholder may appear
+once and not in the host.
+
+### Length
+
+`maxLength` (set by the presets, or 100 to 100000 on a custom channel) shortens
+the body at a line end and appends an ellipsis, so a long daily preview is sent
+shortened rather than refused.
+
+## Personal targets and the daily preview
+
+Members can have targets of their own (`scope = 'user'` channels) once an admin
+allows it under Settings -> Messenger. Their reminders, private ones included,
+also go there. Each member can also have a **daily preview** at a time of their
+choice (events, tasks due, birthdays from a week ahead, waste collection,
+shopping list), read with their own visibility; an admin can send a household
+preview, read like the wall (only what everyone may see), to household
+channels. See `server/services/notification-digest.js`.
+
 ## Security notes
 
 - Use HTTPS whenever the endpoint is outside a trusted private network.

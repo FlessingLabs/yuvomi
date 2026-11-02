@@ -3462,7 +3462,39 @@
         "memberRemoveLastAdmin": "Er moet minstens één beheerder overblijven.",
         "memberRemoveLastSsoAdmin": "Dit is de laatste beheerder die aan SSO is gekoppeld. Koppel eerst een andere beheerder.",
         "backupWebdavUrlInvalid": "Het adres moet beginnen met http:// of https://.",
-        "icsSubscriptionGone": "Dit abonnement bestaat niet meer."
+        "icsSubscriptionGone": "Dit abonnement bestaat niet meer.",
+        "pageMessenger": "Messenger",
+        "pageMessengerDescription": "Telegram en Discord instellen, plus je dagvoorbeeld.",
+        "messenger": {
+            "mineTitle": "Mijn bestemmingen",
+            "mineHint": "Herinneringen en je dagvoorbeeld gaan ook naar deze bestemmingen.",
+            "notAllowed": "Een admin kan je toestaan eigen bestemmingen in te stellen.",
+            "empty": "Nog geen bestemming ingesteld.",
+            "service": "Dienst",
+            "telegramToken": "Bottoken",
+            "telegramTokenHint": "Van @BotFather, ziet eruit als 123456789:AA...",
+            "telegramChat": "Chat-ID",
+            "telegramChatHint": "Je chat-ID of die van een groep. Stuur de bot eerst één bericht.",
+            "discordUrl": "Webhookadres",
+            "discordUrlHint": "In Discord: kanaal bewerken, Integraties, Webhooks, Webhook-URL kopiëren.",
+            "testFailed": "Verzenden mislukt: {{error}}",
+            "digestTitle": "Mijn dagvoorbeeld",
+            "digestEnabled": "Dagvoorbeeld versturen",
+            "digestTime": "Tijd",
+            "digestDay": "Voorbeeld voor",
+            "digestSections": "Inhoud",
+            "digestSectionsHint": "Verjaardagen staan vanaf een week vooraf in elk voorbeeld.",
+            "digestTargets": "Versturen naar",
+            "digestTargetsHint": "Niets geselecteerd betekent: naar alle bestemmingen.",
+            "digestTest": "Nu testen",
+            "digestSaved": "Opgeslagen.",
+            "accessTitle": "Wie eigen bestemmingen mag instellen",
+            "accessHint": "Admins mogen dat altijd.",
+            "householdTitle": "Bestemmingen van het gezin",
+            "householdHint": "Bijvoorbeeld een Telegram-groep. Herinneringen die iedereen mag zien komen hier.",
+            "householdDigestTitle": "Gezinsvoorbeeld",
+            "householdDigestHint": "Gaat naar de bestemmingen van het gezin en toont alleen wat iedereen mag zien."
+        }
     },
     "login": {
         "tagline": "Welkom terug. Je huishouden op één plek.",
@@ -6777,5 +6809,22 @@
         "custom": "Eigen kleur",
         "chooseCustom": "Eigen kleur kiezen",
         "standard": "Standaardkleur"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "Vandaag, {{date}}",
+            "titleTomorrow": "Morgen, {{date}}",
+            "allDay": "hele dag",
+            "birthdayToday": "vandaag",
+            "nameDay": "naamdag",
+            "nothing": "Niets gepland.",
+            "section": {
+                "events": "Afspraken",
+                "tasks": "Taken",
+                "birthdays": "Verjaardagen",
+                "waste": "Afvalophaling",
+                "shopping": "Boodschappenlijst"
+            }
+        }
     }
 }

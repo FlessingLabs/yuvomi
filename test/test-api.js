@@ -845,6 +845,10 @@ const REASONS_WITHOUT_SENTENCE = new Set([
   // rufen diese Routen, und die Seite liest den Grund selbst (sie zeigt dann den
   // Plan nur zum Lesen) - die App-Oberflaeche kommt hier nie vorbei.
   'module_person_access_denied',
+  // Eigene Messenger-Ziele ohne Freigabe (Migration 276): das Blatt Messenger
+  // liest die Freigabe vorher aus GET /notifications/personal und bietet ohne
+  // sie kein Formular an - die 403 erreicht nur ein Aufruf an der Seite vorbei.
+  'notification_personal_not_allowed',
   // Anmeldung und Einrichtung: die Seiten zeigen den Servertext oder lesen ihn
   // per Muster (login.js: "password login is disabled").
   'account_cannot_sign_in', 'password_login_disabled', 'setup_completed', 'required',
@@ -878,6 +882,10 @@ const REASONS_WITHOUT_SENTENCE = new Set([
 // Wiederholung oder eine verschwundene macht den Test rot. Was er NICHT prueft:
 // dass `at403` vollstaendig ist - das ist die Zusage dessen, der die Zeile schreibt.
 const REASONS_PASSED_THROUGH = new Map([
+  // Messenger und Tagesvorschau (Migration 276): PersonalNotificationError
+  // traegt seinen Grund (digest_*, member_not_found) an einer festen 400 bzw. 404.
+  ['routes/notifications-personal.js: err.reason', { sites: 1, at403: [], why: 'feste 400 (digest_*)' }],
+  ['routes/notifications.js: err.reason', { sites: 2, at403: [], why: 'feste 404 (member_not_found) und 400 (digest_*)' }],
   ['routes/calendar/crud.js: error.code', { sites: 1, at403: [['not_authorized', 'services/calendar-occurrence-overrides.js']],
     why: 'sendCalendarOccurrenceError: 403 nur bei not_authorized, sonst 400/404/409' }],
   ['routes/calendar/crud.js: eligibility.reason', { sites: 1, at403: [], why: 'feste 400' }],

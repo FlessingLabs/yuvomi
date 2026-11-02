@@ -9,6 +9,10 @@ import { createLogger } from '../logger.js';
 import { isAdminRequest } from '../middleware/require-admin.js';
 import { createNotificationChannelStore, NOTIFICATION_PROVIDERS } from '../services/notification-channels.js';
 import { notificationService as defaultNotificationService } from '../services/notifications.js';
+import {
+  DIGEST_SECTIONS, PersonalNotificationError, getDigest, listAccess, saveDigest, setAccess,
+} from '../services/notification-personal.js';
+import { sendDigestNow } from '../services/notification-digest.js';
 
 const log = createLogger('NotificationRoutes');
 
@@ -73,10 +77,13 @@ export function buildRouter({
     }
   });
 
+  // NUR HAUSHALTSKANAELE. Die persoenlichen gehoeren ihrer Person (wohin
+  // gehen deren private Erinnerungen?) - seit Migration 276 legen Mitglieder
+  // sie selbst an (routes/notifications-personal.js), und dort bleiben sie.
   router.get('/channels', (req, res) => {
     try {
       void req;
-      res.json({ data: store.listChannels() });
+      res.json({ data: store.listChannels().filter((channel) => channel.scope !== 'user') });
     } catch (err) {
       log.error('Error reading notification channels:', err.message);
       res.status(500).json({ error: 'Internal error.', code: 500 });
@@ -144,6 +151,53 @@ export function buildRouter({
       const id = parseId(req.params.id);
       if (id) store.markChannelTestResult(id, { ok: false, error: err.message });
       res.status(500).json({ error: 'Internal error.', code: 500 });
+    }
+  });
+
+  // ── Freigabe eigener Ziele je Mitglied (Migration 276) ───────────────────
+  router.get('/access', (req, res) => {
+    void req;
+    res.json({ data: listAccess(getDb()) });
+  });
+
+  router.put('/access/:userId', (req, res) => {
+    const userId = parseId(req.params.userId);
+    if (!userId) return res.status(400).json({ error: 'Invalid member id.', code: 400 });
+    try {
+      res.json({ data: { user_id: userId, allowed: setAccess(getDb(), userId, Boolean(req.body?.allowed)) } });
+    } catch (err) {
+      if (err instanceof PersonalNotificationError) return res.status(404).json({ error: err.message, code: 404, reason: err.reason });
+      log.error('Error setting notification access:', err.message);
+      res.status(500).json({ error: 'Internal error.', code: 500 });
+    }
+  });
+
+  // ── Tagesvorschau des Haushalts: nur was jeder sieht, nur in Haushaltskanaele ─
+  router.get('/digest', (req, res) => {
+    void req;
+    res.json({ data: { ...getDigest(getDb(), { scope: 'household' }), sectionsAvailable: DIGEST_SECTIONS } });
+  });
+
+  router.put('/digest', (req, res) => {
+    try {
+      res.json({ data: saveDigest(getDb(), { scope: 'household' }, req.body || {}) });
+    } catch (err) {
+      if (err instanceof PersonalNotificationError) return res.status(400).json({ error: err.message, code: 400, reason: err.reason });
+      res.status(400).json({ error: err.message || 'Invalid input.', code: 400 });
+    }
+  });
+
+  router.post('/digest/test', async (req, res) => {
+    const id = parseId(req.body?.channelId);
+    const channel = id ? store.getChannel(id, { includeSecrets: true }) : null;
+    if (!channel || channel.scope === 'user') return res.status(404).json({ error: 'Notification channel not found.', code: 404 });
+    try {
+      const digest = await sendDigestNow(getDb(), {
+        scope: 'household', digest: getDigest(getDb(), { scope: 'household' }), channel, providers: notificationService.providers,
+      });
+      res.json({ data: { title: digest.title, body: digest.body } });
+    } catch (err) {
+      res.status(502).json({ error: err.message || 'Test failed.', code: 502, reason: 'notification_test_failed' });
     }
   });
 

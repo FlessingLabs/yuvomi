@@ -3480,7 +3480,39 @@
         "memberRemoveLastAdmin": "Kailangang may matirang kahit isang administrator.",
         "memberRemoveLastSsoAdmin": "Ito ang huling administrator na naka-link sa SSO. Mag-link muna ng isa pang administrator.",
         "backupWebdavUrlInvalid": "Dapat magsimula ang address sa http:// o https://.",
-        "icsSubscriptionGone": "Wala na ang subscription na ito."
+        "icsSubscriptionGone": "Wala na ang subscription na ito.",
+        "pageMessenger": "Messenger",
+        "pageMessengerDescription": "I-set up ang Telegram at Discord, pati ang preview ng araw mo.",
+        "messenger": {
+            "mineTitle": "Aking mga destinasyon",
+            "mineHint": "Ipinapadala rin ang mga paalala at ang preview ng araw mo sa mga destinasyong ito.",
+            "notAllowed": "Maaaring payagan ka ng isang admin na mag-set up ng sariling mga destinasyon.",
+            "empty": "Wala pang naka-set up na destinasyon.",
+            "service": "Serbisyo",
+            "telegramToken": "Token ng bot",
+            "telegramTokenHint": "Mula sa @BotFather, mukhang 123456789:AA...",
+            "telegramChat": "Chat ID",
+            "telegramChatHint": "Ang chat ID mo o ng isang grupo. Magpadala muna ng isang mensahe sa bot.",
+            "discordUrl": "Address ng webhook",
+            "discordUrlHint": "Sa Discord: i-edit ang channel, Integrations, Webhooks, Kopyahin ang Webhook URL.",
+            "testFailed": "Hindi naipadala: {{error}}",
+            "digestTitle": "Aking preview ng araw",
+            "digestEnabled": "Ipadala ang preview ng araw",
+            "digestTime": "Oras",
+            "digestDay": "Preview para sa",
+            "digestSections": "Nilalaman",
+            "digestSectionsHint": "Lumalabas ang mga kaarawan sa bawat preview mula isang linggo bago.",
+            "digestTargets": "Ipadala sa",
+            "digestTargetsHint": "Walang napili ay nangangahulugang: sa lahat ng destinasyon.",
+            "digestTest": "Subukan ngayon",
+            "digestSaved": "Na-save.",
+            "accessTitle": "Sino ang puwedeng mag-set up ng sariling destinasyon",
+            "accessHint": "Laging puwede ang mga admin.",
+            "householdTitle": "Mga destinasyon ng pamilya",
+            "householdHint": "Halimbawa, isang grupo sa Telegram. Dito napupunta ang mga paalalang nakikita ng lahat.",
+            "householdDigestTitle": "Preview ng pamilya",
+            "householdDigestHint": "Napupunta sa mga destinasyon ng pamilya at ipinapakita lang ang nakikita ng lahat."
+        }
     },
     "login": {
         "tagline": "Maligayang pagbabalik. Ang iyong tahanan sa iisang lugar.",
@@ -6777,5 +6809,22 @@
         "custom": "Sariling kulay",
         "chooseCustom": "Pumili ng sariling kulay",
         "standard": "Default na kulay"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "Ngayon, {{date}}",
+            "titleTomorrow": "Bukas, {{date}}",
+            "allDay": "buong araw",
+            "birthdayToday": "ngayon",
+            "nameDay": "araw ng pangalan",
+            "nothing": "Walang nakaiskedyul.",
+            "section": {
+                "events": "Mga event",
+                "tasks": "Mga gawain",
+                "birthdays": "Mga kaarawan",
+                "waste": "Pangongolekta ng basura",
+                "shopping": "Listahan ng bibilhin"
+            }
+        }
     }
 }

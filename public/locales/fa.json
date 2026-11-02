@@ -3480,7 +3480,39 @@
         "memberRemoveLastAdmin": "حداقل یک مدیر باید باقی بماند.",
         "memberRemoveLastSsoAdmin": "این آخرین مدیر متصل به SSO است. ابتدا مدیر دیگری را متصل کنید.",
         "backupWebdavUrlInvalid": "نشانی باید با http:// یا https:// شروع شود.",
-        "icsSubscriptionGone": "این اشتراک دیگر وجود ندارد."
+        "icsSubscriptionGone": "این اشتراک دیگر وجود ندارد.",
+        "pageMessenger": "پیام‌رسان‌ها",
+        "pageMessengerDescription": "تلگرام و دیسکورد و پیش‌نمایش روزتان را تنظیم کنید.",
+        "messenger": {
+            "mineTitle": "مقصدهای من",
+            "mineHint": "یادآوری‌ها و پیش‌نمایش روز شما به این مقصدها هم فرستاده می‌شوند.",
+            "notAllowed": "یک مدیر می‌تواند به شما اجازهٔ تنظیم مقصدهای خودتان را بدهد.",
+            "empty": "هنوز مقصدی تنظیم نشده است.",
+            "service": "سرویس",
+            "telegramToken": "توکن ربات",
+            "telegramTokenHint": "از @BotFather، شبیه 123456789:AA...",
+            "telegramChat": "شناسهٔ گفتگو",
+            "telegramChatHint": "شناسهٔ گفتگوی شما یا یک گروه. اول یک بار به ربات پیام بدهید.",
+            "discordUrl": "نشانی وب‌هوک",
+            "discordUrlHint": "در دیسکورد: ویرایش کانال، یکپارچه‌سازی‌ها، وب‌هوک‌ها، کپی نشانی وب‌هوک.",
+            "testFailed": "ارسال ناموفق بود: {{error}}",
+            "digestTitle": "پیش‌نمایش روز من",
+            "digestEnabled": "ارسال پیش‌نمایش روز",
+            "digestTime": "ساعت",
+            "digestDay": "پیش‌نمایش برای",
+            "digestSections": "محتوا",
+            "digestSectionsHint": "تولدها از یک هفته قبل در هر پیش‌نمایش می‌آیند.",
+            "digestTargets": "ارسال به",
+            "digestTargetsHint": "انتخاب نکردن یعنی: به همهٔ مقصدها.",
+            "digestTest": "آزمایش اکنون",
+            "digestSaved": "ذخیره شد.",
+            "accessTitle": "چه کسی می‌تواند مقصدهای خودش را تنظیم کند",
+            "accessHint": "مدیران همیشه می‌توانند.",
+            "householdTitle": "مقصدهای خانواده",
+            "householdHint": "مثلاً یک گروه تلگرام. یادآوری‌هایی که همه می‌بینند اینجا می‌آیند.",
+            "householdDigestTitle": "پیش‌نمایش خانواده",
+            "householdDigestHint": "به مقصدهای خانواده می‌رود و فقط چیزی را نشان می‌دهد که همه می‌بینند."
+        }
     },
     "login": {
         "tagline": "دوباره خوش آمدید. خانهٔ شما در یک جا.",
@@ -6777,5 +6809,22 @@
         "custom": "رنگ دلخواه",
         "chooseCustom": "انتخاب رنگ دلخواه",
         "standard": "رنگ پیش‌فرض"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "امروز، {{date}}",
+            "titleTomorrow": "فردا، {{date}}",
+            "allDay": "تمام روز",
+            "birthdayToday": "امروز",
+            "nameDay": "روز نام",
+            "nothing": "برنامه‌ای ثبت نشده است.",
+            "section": {
+                "events": "رویدادها",
+                "tasks": "کارها",
+                "birthdays": "تولدها",
+                "waste": "جمع‌آوری زباله",
+                "shopping": "فهرست خرید"
+            }
+        }
     }
 }

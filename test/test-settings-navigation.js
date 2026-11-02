@@ -229,7 +229,9 @@ test('die Blaetter verteilen sich wie beschlossen auf drei Bereiche, je Modul ei
   // installieren ist eine Handlung im Modul-Bereich, kein Modul - deshalb ein
   // Blatt ohne `module`, aber in derselben Domaene.
   // R23 D14: die Kalender-Synchronisation ist ein eigenes Blatt (vorher 16).
-  assert.deepEqual(perDomain, { personal: 5, admin: 8, modules: 17 });
+  // Migration 276: Messenger (Telegram, Discord, Tagesvorschau) ist ein Blatt im
+  // Konto - jedes Mitglied richtet dort seine eigenen Ziele ein (vorher 5).
+  assert.deepEqual(perDomain, { personal: 6, admin: 8, modules: 17 });
   assert.deepEqual(SETTINGS_DOMAINS.map((domain) => domain.id), ['personal', 'admin', 'modules']);
   // Jedes Blatt haengt an einem existierenden Bereich, jeder Abschnitt an
   // einem existierenden Blatt, und kein Blatt ist leer.
@@ -1225,6 +1227,7 @@ const GUARDED_SWITCH_FORMS = new Map([
   ['admin-weather.js#weather-form', 'Automatisch orten fuellt die Koordinaten desselben Formulars'],
   ['personal-weather.js#pweather-form', 'Automatisch orten fuellt die Koordinaten desselben Formulars'],
   ['notifications.js#${esc(channel.id ?? \'\')}', 'Kanal: Aktiv haengt an Adresse und Zugang des Kanals'],
+  ['messenger.js#${id(\'time\')}', 'Tagesvorschau: Ein haengt an Uhrzeit, Inhalt und Zielen, die der Server zusammen prueft'],
   ['personal-calendar-subscriptions.js#ics-add-form', 'Anlegen eines Abos'],
   ['personal-calendar-subscriptions.js#ics-edit-form', 'Dialog mit eigenem Dirty-Schutz (components/modal.js)'],
 ]);

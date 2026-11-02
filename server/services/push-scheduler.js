@@ -6,6 +6,7 @@
 import { runExternalJob } from '../utils/restore-state.js';
 import { createLogger } from '../logger.js';
 import { processDueNotifications } from './notifications.js';
+import { processDueDigests } from './notification-digest.js';
 
 const log = createLogger('PushScheduler');
 
@@ -20,6 +21,10 @@ export function startScheduler() {
   const run = () => {
     runExternalJob(() => processDuePushes())
       .catch((err) => log.error('Push scheduler run failed:', err?.message || err));
+    // Die Tagesvorschau im selben Takt, aber als eigener Lauf: eine Vorschau,
+    // die scheitert, haelt keine faellige Erinnerung auf (und umgekehrt).
+    runExternalJob(() => processDueDigests())
+      .catch((err) => log.error('Digest run failed:', err?.message || err));
   };
   setTimeout(run, 10_000).unref();
   setInterval(run, 60_000).unref();

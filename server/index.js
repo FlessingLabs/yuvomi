@@ -98,6 +98,7 @@ import { recoverInterruptedInstalls } from './services/module-install.js';
 import pushRouter from './routes/push.js';
 import emailRouter from './routes/email.js';
 import notificationsRouter from './routes/notifications.js';
+import notificationsPersonalRouter from './routes/notifications-personal.js';
 import healthRouter from './routes/health.js';
 import rewardsRouter from './routes/rewards.js';
 import permissionsRouter from './routes/permissions.js';
@@ -830,6 +831,9 @@ app.use('/api/v1/waste', wasteRouter);
 app.use('/api/v1/modules', modulesRouter);
 app.use('/api/v1/push', pushRouter);
 app.use('/api/v1/email', emailRouter);
+// Die eigenen Ziele und die eigene Tagesvorschau gehoeren jedem Mitglied und
+// haengen deshalb VOR dem Admin-Router, der requireAdmin auf allem traegt.
+app.use('/api/v1/notifications/personal', notificationsPersonalRouter);
 app.use('/api/v1/notifications', notificationsRouter);
 app.use('/api/v1/health', healthRouter);
 app.use('/api/v1/rewards', rewardsRouter);

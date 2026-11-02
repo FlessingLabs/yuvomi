@@ -3480,7 +3480,39 @@
         "memberRemoveLastAdmin": "Setidaknya satu administrator harus tetap ada.",
         "memberRemoveLastSsoAdmin": "Ini administrator terakhir yang tertaut ke SSO. Tautkan administrator lain terlebih dahulu.",
         "backupWebdavUrlInvalid": "Alamat harus diawali dengan http:// atau https://.",
-        "icsSubscriptionGone": "Langganan ini sudah tidak ada."
+        "icsSubscriptionGone": "Langganan ini sudah tidak ada.",
+        "pageMessenger": "Pesan",
+        "pageMessengerDescription": "Siapkan Telegram dan Discord, serta pratinjau harian Anda.",
+        "messenger": {
+            "mineTitle": "Tujuan saya",
+            "mineHint": "Pengingat dan pratinjau harian Anda juga dikirim ke tujuan ini.",
+            "notAllowed": "Admin dapat mengizinkan Anda menyiapkan tujuan sendiri.",
+            "empty": "Belum ada tujuan yang disiapkan.",
+            "service": "Layanan",
+            "telegramToken": "Token bot",
+            "telegramTokenHint": "Dari @BotFather, terlihat seperti 123456789:AA...",
+            "telegramChat": "ID obrolan",
+            "telegramChatHint": "ID obrolan Anda atau milik grup. Kirim pesan ke bot sekali dulu.",
+            "discordUrl": "Alamat webhook",
+            "discordUrlHint": "Di Discord: edit kanal, Integrasi, Webhook, Salin URL Webhook.",
+            "testFailed": "Gagal mengirim: {{error}}",
+            "digestTitle": "Pratinjau harian saya",
+            "digestEnabled": "Kirim pratinjau harian",
+            "digestTime": "Waktu",
+            "digestDay": "Pratinjau untuk",
+            "digestSections": "Isi",
+            "digestSectionsHint": "Ulang tahun muncul di setiap pratinjau sejak seminggu sebelumnya.",
+            "digestTargets": "Kirim ke",
+            "digestTargetsHint": "Tidak memilih apa pun berarti: ke semua tujuan.",
+            "digestTest": "Uji sekarang",
+            "digestSaved": "Tersimpan.",
+            "accessTitle": "Siapa yang boleh menyiapkan tujuan sendiri",
+            "accessHint": "Admin selalu boleh.",
+            "householdTitle": "Tujuan keluarga",
+            "householdHint": "Misalnya grup Telegram. Pengingat yang boleh dilihat semua orang dikirim ke sini.",
+            "householdDigestTitle": "Pratinjau keluarga",
+            "householdDigestHint": "Dikirim ke tujuan keluarga dan hanya menampilkan yang boleh dilihat semua orang."
+        }
     },
     "login": {
         "tagline": "Selamat datang kembali. Rumah Anda dalam satu tempat.",
@@ -6777,5 +6809,22 @@
         "custom": "Warna sendiri",
         "chooseCustom": "Pilih warna sendiri",
         "standard": "Warna bawaan"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "Hari ini, {{date}}",
+            "titleTomorrow": "Besok, {{date}}",
+            "allDay": "sepanjang hari",
+            "birthdayToday": "hari ini",
+            "nameDay": "hari nama",
+            "nothing": "Tidak ada jadwal.",
+            "section": {
+                "events": "Acara",
+                "tasks": "Tugas",
+                "birthdays": "Ulang tahun",
+                "waste": "Pengangkutan sampah",
+                "shopping": "Daftar belanja"
+            }
+        }
     }
 }

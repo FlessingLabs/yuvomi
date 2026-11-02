@@ -3706,7 +3706,39 @@
         "memberRemoveLastAdmin": "Musi pozostać co najmniej jeden administrator.",
         "memberRemoveLastSsoAdmin": "To ostatni administrator powiązany z SSO. Najpierw powiąż innego administratora.",
         "backupWebdavUrlInvalid": "Adres musi zaczynać się od http:// lub https://.",
-        "icsSubscriptionGone": "Ta subskrypcja już nie istnieje."
+        "icsSubscriptionGone": "Ta subskrypcja już nie istnieje.",
+        "pageMessenger": "Komunikatory",
+        "pageMessengerDescription": "Skonfiguruj Telegram i Discord oraz swój podgląd dnia.",
+        "messenger": {
+            "mineTitle": "Moje cele",
+            "mineHint": "Przypomnienia i twój podgląd dnia trafiają też do tych celów.",
+            "notAllowed": "Admin może pozwolić ci skonfigurować własne cele.",
+            "empty": "Nie skonfigurowano jeszcze żadnego celu.",
+            "service": "Usługa",
+            "telegramToken": "Token bota",
+            "telegramTokenHint": "Od @BotFather, wygląda jak 123456789:AA...",
+            "telegramChat": "ID czatu",
+            "telegramChatHint": "Twoje ID czatu lub grupy. Najpierw napisz raz do bota.",
+            "discordUrl": "Adres webhooka",
+            "discordUrlHint": "W Discordzie: edytuj kanał, Integracje, Webhooki, Kopiuj URL webhooka.",
+            "testFailed": "Wysyłanie nie powiodło się: {{error}}",
+            "digestTitle": "Mój podgląd dnia",
+            "digestEnabled": "Wysyłaj podgląd dnia",
+            "digestTime": "Godzina",
+            "digestDay": "Podgląd na",
+            "digestSections": "Zawartość",
+            "digestSectionsHint": "Urodziny pojawiają się w każdym podglądzie od tygodnia wcześniej.",
+            "digestTargets": "Wyślij do",
+            "digestTargetsHint": "Brak wyboru oznacza: do wszystkich celów.",
+            "digestTest": "Przetestuj teraz",
+            "digestSaved": "Zapisano.",
+            "accessTitle": "Kto może konfigurować własne cele",
+            "accessHint": "Admini mogą zawsze.",
+            "householdTitle": "Cele rodziny",
+            "householdHint": "Na przykład grupa w Telegramie. Trafiają tu przypomnienia widoczne dla wszystkich.",
+            "householdDigestTitle": "Podgląd rodzinny",
+            "householdDigestHint": "Trafia do celów rodziny i pokazuje tylko to, co wszyscy mogą widzieć."
+        }
     },
     "login": {
         "tagline": "Witaj ponownie. Twój dom w jednym miejscu.",
@@ -7117,5 +7149,22 @@
         "custom": "Własny kolor",
         "chooseCustom": "Wybierz własny kolor",
         "standard": "Kolor domyślny"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "Dziś, {{date}}",
+            "titleTomorrow": "Jutro, {{date}}",
+            "allDay": "cały dzień",
+            "birthdayToday": "dziś",
+            "nameDay": "imieniny",
+            "nothing": "Nic nie zaplanowano.",
+            "section": {
+                "events": "Wydarzenia",
+                "tasks": "Zadania",
+                "birthdays": "Urodziny",
+                "waste": "Wywóz śmieci",
+                "shopping": "Lista zakupów"
+            }
+        }
     }
 }

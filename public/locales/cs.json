@@ -3580,7 +3580,39 @@
         "memberRemoveLastAdmin": "Musí zůstat alespoň jeden správce.",
         "memberRemoveLastSsoAdmin": "Toto je poslední správce propojený se SSO. Nejprve propojte dalšího správce.",
         "backupWebdavUrlInvalid": "Adresa musí začínat http:// nebo https://.",
-        "icsSubscriptionGone": "Toto předplatné už neexistuje."
+        "icsSubscriptionGone": "Toto předplatné už neexistuje.",
+        "pageMessenger": "Messengery",
+        "pageMessengerDescription": "Nastav Telegram a Discord a k tomu přehled dne.",
+        "messenger": {
+            "mineTitle": "Moje cíle",
+            "mineHint": "Připomínky a tvůj přehled dne jdou také do těchto cílů.",
+            "notAllowed": "Admin ti může povolit nastavit vlastní cíle.",
+            "empty": "Zatím není nastaven žádný cíl.",
+            "service": "Služba",
+            "telegramToken": "Token bota",
+            "telegramTokenHint": "Od @BotFather, vypadá jako 123456789:AA...",
+            "telegramChat": "ID chatu",
+            "telegramChatHint": "Tvoje ID chatu nebo skupiny. Nejprve botovi jednou napiš.",
+            "discordUrl": "Adresa webhooku",
+            "discordUrlHint": "V Discordu: upravit kanál, Integrace, Webhooky, Kopírovat URL webhooku.",
+            "testFailed": "Odeslání se nezdařilo: {{error}}",
+            "digestTitle": "Můj přehled dne",
+            "digestEnabled": "Posílat přehled dne",
+            "digestTime": "Čas",
+            "digestDay": "Přehled na",
+            "digestSections": "Obsah",
+            "digestSectionsHint": "Narozeniny se objeví v každém přehledu týden předem.",
+            "digestTargets": "Poslat do",
+            "digestTargetsHint": "Nic nevybráno znamená: do všech cílů.",
+            "digestTest": "Otestovat teď",
+            "digestSaved": "Uloženo.",
+            "accessTitle": "Kdo smí nastavit vlastní cíle",
+            "accessHint": "Admini smějí vždy.",
+            "householdTitle": "Cíle rodiny",
+            "householdHint": "Například skupina v Telegramu. Sem jdou připomínky, které smí vidět všichni.",
+            "householdDigestTitle": "Rodinný přehled",
+            "householdDigestHint": "Jde do cílů rodiny a ukazuje jen to, co smí vidět všichni."
+        }
     },
     "login": {
         "tagline": "Vítejte zpět. Váš domov na jednom místě.",
@@ -6957,5 +6989,22 @@
         "custom": "Vlastní barva",
         "chooseCustom": "Vybrat vlastní barvu",
         "standard": "Výchozí barva"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "Dnes, {{date}}",
+            "titleTomorrow": "Zítra, {{date}}",
+            "allDay": "celý den",
+            "birthdayToday": "dnes",
+            "nameDay": "svátek",
+            "nothing": "Nic naplánováno.",
+            "section": {
+                "events": "Události",
+                "tasks": "Úkoly",
+                "birthdays": "Narozeniny",
+                "waste": "Svoz odpadu",
+                "shopping": "Nákupní seznam"
+            }
+        }
     }
 }

@@ -3480,7 +3480,39 @@
         "memberRemoveLastAdmin": "Mindestens ein Administrator muss bleiben.",
         "memberRemoveLastSsoAdmin": "Das ist der letzte Administrator mit SSO-Verknüpfung. Verknüpfe zuerst einen weiteren Administrator.",
         "backupWebdavUrlInvalid": "Die Adresse muss mit http:// oder https:// beginnen.",
-        "icsSubscriptionGone": "Dieses Abonnement gibt es nicht mehr."
+        "icsSubscriptionGone": "Dieses Abonnement gibt es nicht mehr.",
+        "pageMessenger": "Messenger",
+        "pageMessengerDescription": "Telegram und Discord einrichten, dazu deine Tagesvorschau.",
+        "messenger": {
+            "mineTitle": "Meine Ziele",
+            "mineHint": "Erinnerungen und deine Tagesvorschau gehen auch an diese Ziele.",
+            "notAllowed": "Eigene Ziele kann dir ein Admin freigeben.",
+            "empty": "Noch kein Ziel eingerichtet.",
+            "service": "Dienst",
+            "telegramToken": "Bot-Token",
+            "telegramTokenHint": "Vom @BotFather, sieht aus wie 123456789:AA...",
+            "telegramChat": "Chat-ID",
+            "telegramChatHint": "Deine Chat-ID oder die einer Gruppe. Schreib dem Bot vorher einmal.",
+            "discordUrl": "Webhook-Adresse",
+            "discordUrlHint": "In Discord: Kanal bearbeiten, Integrationen, Webhooks, Webhook-URL kopieren.",
+            "testFailed": "Senden fehlgeschlagen: {{error}}",
+            "digestTitle": "Meine Tagesvorschau",
+            "digestEnabled": "Tagesvorschau senden",
+            "digestTime": "Uhrzeit",
+            "digestDay": "Vorschau für",
+            "digestSections": "Inhalt",
+            "digestSectionsHint": "Geburtstage stehen ab einer Woche vorher in jeder Vorschau.",
+            "digestTargets": "Senden an",
+            "digestTargetsHint": "Nichts ausgewählt heißt: an alle Ziele.",
+            "digestTest": "Jetzt testen",
+            "digestSaved": "Gespeichert.",
+            "accessTitle": "Wer eigene Ziele einrichten darf",
+            "accessHint": "Admins dürfen das immer.",
+            "householdTitle": "Ziele der Familie",
+            "householdHint": "Zum Beispiel eine Telegram-Gruppe. Hierhin gehen Erinnerungen, die alle sehen dürfen.",
+            "householdDigestTitle": "Familien-Vorschau",
+            "householdDigestHint": "Geht an die Ziele der Familie und zeigt nur, was alle sehen dürfen."
+        }
     },
     "login": {
         "tagline": "Willkommen zurück. Dein Zuhause an einem Ort.",
@@ -6777,5 +6809,22 @@
         "custom": "Eigene Farbe",
         "chooseCustom": "Eigene Farbe wählen",
         "standard": "Standardfarbe"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "Heute, {{date}}",
+            "titleTomorrow": "Morgen, {{date}}",
+            "allDay": "ganztägig",
+            "birthdayToday": "heute",
+            "nameDay": "Namenstag",
+            "nothing": "Nichts eingetragen.",
+            "section": {
+                "events": "Termine",
+                "tasks": "Aufgaben",
+                "birthdays": "Geburtstage",
+                "waste": "Müllabfuhr",
+                "shopping": "Einkaufsliste"
+            }
+        }
     }
 }

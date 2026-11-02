@@ -3462,7 +3462,39 @@
         "memberRemoveLastAdmin": "Minst én administrator må bli igjen.",
         "memberRemoveLastSsoAdmin": "Dette er den siste administratoren knyttet til SSO. Knytt til en annen administrator først.",
         "backupWebdavUrlInvalid": "Adressen må begynne med http:// eller https://.",
-        "icsSubscriptionGone": "Dette abonnementet finnes ikke lenger."
+        "icsSubscriptionGone": "Dette abonnementet finnes ikke lenger.",
+        "pageMessenger": "Meldinger",
+        "pageMessengerDescription": "Sett opp Telegram og Discord, og dagsoversikten din.",
+        "messenger": {
+            "mineTitle": "Mine mål",
+            "mineHint": "Påminnelser og dagsoversikten din går også til disse målene.",
+            "notAllowed": "En admin kan la deg sette opp egne mål.",
+            "empty": "Ingen mål satt opp ennå.",
+            "service": "Tjeneste",
+            "telegramToken": "Bot-token",
+            "telegramTokenHint": "Fra @BotFather, ser ut som 123456789:AA...",
+            "telegramChat": "Chat-ID",
+            "telegramChatHint": "Din chat-ID eller en gruppes. Skriv til boten én gang først.",
+            "discordUrl": "Webhook-adresse",
+            "discordUrlHint": "I Discord: rediger kanal, Integrasjoner, Webhooks, Kopier webhook-URL.",
+            "testFailed": "Sending mislyktes: {{error}}",
+            "digestTitle": "Min dagsoversikt",
+            "digestEnabled": "Send dagsoversikt",
+            "digestTime": "Klokkeslett",
+            "digestDay": "Oversikt for",
+            "digestSections": "Innhold",
+            "digestSectionsHint": "Bursdager vises i hver oversikt fra en uke før.",
+            "digestTargets": "Send til",
+            "digestTargetsHint": "Ingenting valgt betyr: til alle mål.",
+            "digestTest": "Test nå",
+            "digestSaved": "Lagret.",
+            "accessTitle": "Hvem som kan sette opp egne mål",
+            "accessHint": "Admins kan alltid.",
+            "householdTitle": "Familiens mål",
+            "householdHint": "For eksempel en Telegram-gruppe. Hit går påminnelser som alle kan se.",
+            "householdDigestTitle": "Familieoversikt",
+            "householdDigestHint": "Går til familiens mål og viser bare det alle kan se."
+        }
     },
     "login": {
         "tagline": "Velkommen tilbake. Hjemmet ditt samlet på ett sted.",
@@ -6777,5 +6809,22 @@
         "custom": "Egen farge",
         "chooseCustom": "Velg egen farge",
         "standard": "Standardfarge"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "I dag, {{date}}",
+            "titleTomorrow": "I morgen, {{date}}",
+            "allDay": "hele dagen",
+            "birthdayToday": "i dag",
+            "nameDay": "navnedag",
+            "nothing": "Ingenting planlagt.",
+            "section": {
+                "events": "Avtaler",
+                "tasks": "Oppgaver",
+                "birthdays": "Bursdager",
+                "waste": "Søppeltømming",
+                "shopping": "Handleliste"
+            }
+        }
     }
 }

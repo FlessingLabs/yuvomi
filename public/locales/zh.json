@@ -3462,7 +3462,39 @@
         "memberRemoveLastAdmin": "至少必须保留一名管理员。",
         "memberRemoveLastSsoAdmin": "这是最后一名关联 SSO 的管理员。请先关联另一名管理员。",
         "backupWebdavUrlInvalid": "地址必须以 http:// 或 https:// 开头。",
-        "icsSubscriptionGone": "此订阅已不存在。"
+        "icsSubscriptionGone": "此订阅已不存在。",
+        "pageMessenger": "即时通讯",
+        "pageMessengerDescription": "设置 Telegram 和 Discord，以及你的每日预览。",
+        "messenger": {
+            "mineTitle": "我的接收目标",
+            "mineHint": "提醒和你的每日预览也会发送到这些目标。",
+            "notAllowed": "管理员可以允许你设置自己的接收目标。",
+            "empty": "尚未设置接收目标。",
+            "service": "服务",
+            "telegramToken": "机器人令牌",
+            "telegramTokenHint": "来自 @BotFather，形如 123456789:AA...",
+            "telegramChat": "聊天 ID",
+            "telegramChatHint": "你的聊天 ID 或某个群组的 ID。请先给机器人发一条消息。",
+            "discordUrl": "Webhook 地址",
+            "discordUrlHint": "在 Discord 中：编辑频道、整合、Webhook、复制 Webhook 网址。",
+            "testFailed": "发送失败：{{error}}",
+            "digestTitle": "我的每日预览",
+            "digestEnabled": "发送每日预览",
+            "digestTime": "时间",
+            "digestDay": "预览日期",
+            "digestSections": "内容",
+            "digestSectionsHint": "生日会提前一周出现在每次预览中。",
+            "digestTargets": "发送到",
+            "digestTargetsHint": "不选择即发送到所有目标。",
+            "digestTest": "立即测试",
+            "digestSaved": "已保存。",
+            "accessTitle": "谁可以设置自己的接收目标",
+            "accessHint": "管理员始终可以。",
+            "householdTitle": "家庭接收目标",
+            "householdHint": "例如一个 Telegram 群组。所有人可见的提醒会发到这里。",
+            "householdDigestTitle": "家庭预览",
+            "householdDigestHint": "发送到家庭接收目标，只显示所有人都能看到的内容。"
+        }
     },
     "login": {
         "tagline": "欢迎回来。您的家，尽在一处。",
@@ -6777,5 +6809,22 @@
         "custom": "自定义颜色",
         "chooseCustom": "选择自定义颜色",
         "standard": "默认颜色"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "今天，{{date}}",
+            "titleTomorrow": "明天，{{date}}",
+            "allDay": "全天",
+            "birthdayToday": "今天",
+            "nameDay": "命名日",
+            "nothing": "没有安排。",
+            "section": {
+                "events": "日程",
+                "tasks": "任务",
+                "birthdays": "生日",
+                "waste": "垃圾收运",
+                "shopping": "购物清单"
+            }
+        }
     }
 }

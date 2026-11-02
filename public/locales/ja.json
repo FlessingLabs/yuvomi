@@ -3462,7 +3462,39 @@
         "memberRemoveLastAdmin": "管理者が少なくとも1人必要です。",
         "memberRemoveLastSsoAdmin": "これは SSO にリンクされた最後の管理者です。先に別の管理者をリンクしてください。",
         "backupWebdavUrlInvalid": "アドレスは http:// または https:// で始める必要があります。",
-        "icsSubscriptionGone": "この購読はもう存在しません。"
+        "icsSubscriptionGone": "この購読はもう存在しません。",
+        "pageMessenger": "メッセンジャー",
+        "pageMessengerDescription": "Telegram と Discord、今日のまとめを設定します。",
+        "messenger": {
+            "mineTitle": "自分の送信先",
+            "mineHint": "リマインダーと今日のまとめはこの送信先にも届きます。",
+            "notAllowed": "管理者は自分の送信先の設定を許可できます。",
+            "empty": "送信先はまだありません。",
+            "service": "サービス",
+            "telegramToken": "ボットトークン",
+            "telegramTokenHint": "@BotFather から取得。123456789:AA... の形式です",
+            "telegramChat": "チャット ID",
+            "telegramChatHint": "自分またはグループのチャット ID。先にボットへ一度メッセージを送ってください。",
+            "discordUrl": "Webhook のアドレス",
+            "discordUrlHint": "Discord で: チャンネルを編集、連携サービス、ウェブフック、ウェブフック URL をコピー。",
+            "testFailed": "送信に失敗しました: {{error}}",
+            "digestTitle": "自分のまとめ",
+            "digestEnabled": "まとめを送る",
+            "digestTime": "時刻",
+            "digestDay": "まとめの対象日",
+            "digestSections": "内容",
+            "digestSectionsHint": "誕生日は 1 週間前から毎回のまとめに載ります。",
+            "digestTargets": "送信先",
+            "digestTargetsHint": "何も選ばない場合はすべての送信先に送ります。",
+            "digestTest": "今すぐテスト",
+            "digestSaved": "保存しました。",
+            "accessTitle": "自分の送信先を設定できる人",
+            "accessHint": "管理者は常に設定できます。",
+            "householdTitle": "家族の送信先",
+            "householdHint": "たとえば Telegram のグループ。全員が見られるリマインダーがここに届きます。",
+            "householdDigestTitle": "家族のまとめ",
+            "householdDigestHint": "家族の送信先に届き、全員が見られる内容だけを表示します。"
+        }
     },
     "login": {
         "tagline": "おかえりなさい。暮らしのことを一か所に。",
@@ -6777,5 +6809,22 @@
         "custom": "カスタムカラー",
         "chooseCustom": "カスタムカラーを選択",
         "standard": "既定の色"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "今日 {{date}}",
+            "titleTomorrow": "明日 {{date}}",
+            "allDay": "終日",
+            "birthdayToday": "今日",
+            "nameDay": "名前の日",
+            "nothing": "予定はありません。",
+            "section": {
+                "events": "予定",
+                "tasks": "タスク",
+                "birthdays": "誕生日",
+                "waste": "ごみ収集",
+                "shopping": "買い物リスト"
+            }
+        }
     }
 }

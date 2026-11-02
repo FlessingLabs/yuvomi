@@ -549,6 +549,9 @@ const DYNAMIC_KEY_SITES = {
   // reminderPayload(): `translate(locale, origin.titleKey)` - die Titel der
   // Herkunftstabelle REMINDER_ORIGINS in derselben Datei.
   'services/notifications.js|origin.titleKey': (code) => [...code.matchAll(/\btitleKey:\s*'([^']+)'/g)].map((m) => m[1]),
+  // buildDigest(): `translate(locale, def.titleKey)` - die Ueberschriften der
+  // Abschnitte aus SECTION_BUILDERS in derselben Datei (Tagesvorschau).
+  'services/notification-digest.js|def.titleKey': (code) => [...code.matchAll(/\btitleKey:\s*'([^']+)'/g)].map((m) => m[1]),
 };
 
 function serverSourceFiles(dir = SERVER_DIR, out = []) {

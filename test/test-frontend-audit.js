@@ -22438,6 +22438,7 @@ const TECHNICAL_DETAIL_SITES = new Map([
   ['settings/pages/sync-calendar.js', [4, 'Aktualisieren und Abgleich von CalDAV, Outlook, Apple: Antwort des fremden Servers']],
   ['settings/pages/sync-contacts.js', [1, 'CardDAV-Abgleich und Aktualisieren: connection_failed traegt die Antwort des fremden Servers']],
   ['settings/pages/sync-reminders.js', [1, 'Aktualisieren der Erinnerungslisten: Antwort des fremden Servers']],
+  ['settings/pages/messenger.js', [2, 'Telegram/Discord: Testversand und Zugangsdaten (Token, Chat-ID, Webhook) - Antwort und Pruefung des fremden Dienstes']],
 ]);
 
 function countTechnicalDetailCalls(source) {

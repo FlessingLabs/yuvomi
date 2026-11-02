@@ -3688,7 +3688,39 @@
         "memberRemoveLastAdmin": "Має залишитися принаймні один адміністратор.",
         "memberRemoveLastSsoAdmin": "Це останній адміністратор, пов’язаний із SSO. Спочатку пов’яжіть іншого адміністратора.",
         "backupWebdavUrlInvalid": "Адреса має починатися з http:// або https://.",
-        "icsSubscriptionGone": "Цієї підписки більше немає."
+        "icsSubscriptionGone": "Цієї підписки більше немає.",
+        "pageMessenger": "Месенджери",
+        "pageMessengerDescription": "Налаштуйте Telegram і Discord, а також огляд дня.",
+        "messenger": {
+            "mineTitle": "Мої отримувачі",
+            "mineHint": "Нагадування та ваш огляд дня також надходять цим отримувачам.",
+            "notAllowed": "Адмін може дозволити вам налаштувати власних отримувачів.",
+            "empty": "Отримувачів ще не налаштовано.",
+            "service": "Сервіс",
+            "telegramToken": "Токен бота",
+            "telegramTokenHint": "Від @BotFather, виглядає як 123456789:AA...",
+            "telegramChat": "ID чату",
+            "telegramChatHint": "Ваш ID чату або ID групи. Спершу один раз напишіть боту.",
+            "discordUrl": "Адреса вебхука",
+            "discordUrlHint": "У Discord: редагувати канал, Інтеграції, Вебхуки, Копіювати URL вебхука.",
+            "testFailed": "Не вдалося надіслати: {{error}}",
+            "digestTitle": "Мій огляд дня",
+            "digestEnabled": "Надсилати огляд дня",
+            "digestTime": "Час",
+            "digestDay": "Огляд на",
+            "digestSections": "Вміст",
+            "digestSectionsHint": "Дні народження з’являються в кожному огляді за тиждень.",
+            "digestTargets": "Надсилати",
+            "digestTargetsHint": "Нічого не вибрано означає: усім отримувачам.",
+            "digestTest": "Перевірити зараз",
+            "digestSaved": "Збережено.",
+            "accessTitle": "Хто може налаштовувати власних отримувачів",
+            "accessHint": "Адміни можуть завжди.",
+            "householdTitle": "Отримувачі родини",
+            "householdHint": "Наприклад, група в Telegram. Сюди надходять нагадування, які бачать усі.",
+            "householdDigestTitle": "Сімейний огляд",
+            "householdDigestHint": "Надходить отримувачам родини й показує лише те, що бачать усі."
+        }
     },
     "login": {
         "tagline": "З поверненням. Ваш дім - в одному місці.",
@@ -7117,5 +7149,22 @@
         "custom": "Власний колір",
         "chooseCustom": "Вибрати власний колір",
         "standard": "Колір за замовчуванням"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "Сьогодні, {{date}}",
+            "titleTomorrow": "Завтра, {{date}}",
+            "allDay": "увесь день",
+            "birthdayToday": "сьогодні",
+            "nameDay": "іменини",
+            "nothing": "Нічого не заплановано.",
+            "section": {
+                "events": "Події",
+                "tasks": "Завдання",
+                "birthdays": "Дні народження",
+                "waste": "Вивезення сміття",
+                "shopping": "Список покупок"
+            }
+        }
     }
 }

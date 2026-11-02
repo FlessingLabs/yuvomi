@@ -11828,6 +11828,41 @@ const MIGRATIONS = [
         ON module_person_grants(module_id, grantee_id);
     `,
   },
+  {
+    version: 276,
+    description: 'Notifications: who may set up personal channels, and the daily preview',
+    up: `
+      -- WER EIGENE ZIELE EINRICHTEN DARF. Persoenliche Kanaele (scope = 'user')
+      -- kennt notification_channels seit jeher; bisher legte sie niemand an.
+      -- Ein Admin gibt sie je Mitglied frei, ausdruecklich und ohne Ableitung
+      -- aus Rolle oder family_role (DECISIONS.md 1). Admins brauchen keine Zeile.
+      CREATE TABLE IF NOT EXISTS notification_personal_access (
+        user_id    INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+        created_at TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now'))
+      );
+
+      -- DIE TAGESVORSCHAU. Eine Zeile je Person (scope 'user') und hoechstens eine
+      -- fuer den Haushalt (scope 'household', user_id NULL), die nur zeigt, was
+      -- jeder sehen darf. send_time ist Wanduhrzeit in der Haushaltszone;
+      -- last_sent_date (Tag in der Haushaltszone) verhindert den zweiten Versand
+      -- am selben Tag, auch ueber einen Neustart hinweg.
+      CREATE TABLE IF NOT EXISTS notification_digests (
+        id               INTEGER PRIMARY KEY AUTOINCREMENT,
+        scope            TEXT    NOT NULL CHECK (scope IN ('user', 'household')),
+        user_id          INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        enabled          INTEGER NOT NULL DEFAULT 0,
+        send_time        TEXT    NOT NULL DEFAULT '19:00',
+        day              TEXT    NOT NULL DEFAULT 'tomorrow' CHECK (day IN ('today', 'tomorrow')),
+        sections_json    TEXT    NOT NULL DEFAULT '[]',
+        channel_ids_json TEXT    NOT NULL DEFAULT '[]',
+        last_sent_date   TEXT,
+        updated_at       TEXT    NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+        CHECK ((scope = 'user') = (user_id IS NOT NULL))
+      );
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_notification_digests_user ON notification_digests(user_id) WHERE scope = 'user';
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_notification_digests_household ON notification_digests(scope) WHERE scope = 'household';
+    `,
+  },
 ];
 
 /**

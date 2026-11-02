@@ -7,10 +7,13 @@ import { isIP } from 'node:net';
 import * as dbModule from '../db.js';
 import { isBlockedAddress, isBlockedHostname, normalizeHostname } from '../utils/ssrf.js';
 import { ENV_ALLOW_PRIVATE_NETWORK, isPrivateNetworkAllowed } from './notification-providers/guarded-fetch.js';
+import { forgetDigestChannel } from './notification-personal.js';
 import {
   WEBHOOK_TEMPLATE_PLACEHOLDERS,
+  WEBHOOK_URL_TOKEN,
   renderPayloadTemplate,
   unknownTemplatePlaceholders,
+  urlTokenValid,
 } from './notification-providers/webhook.js';
 
 export const NOTIFICATION_PROVIDERS = [
@@ -143,7 +146,74 @@ const WEBHOOK_TEMPLATE_SAMPLE = Object.freeze({
   tag: 'reminder-1',
 });
 
+/**
+ * VORLAGEN FUER DEN WEBHOOK, KEINE EIGENEN ANBIETER (#692). Telegram und Discord
+ * sind ein Webhook mit fester Adresse und festem Body - genau das, was ein
+ * Admin sonst von Hand in Adresse und Vorlage schriebe. Die Vorlage fuellt
+ * beides aus wenigen Feldern und haelt den Schluessel im Pfad write-only
+ * (`{{token}}`, siehe webhook.js). Zugestellt wird weiter vom einen
+ * generischen Anbieter, mit derselben Buchhaltung und demselben SSRF-Schutz.
+ */
+export const WEBHOOK_PRESETS = Object.freeze({
+  telegram: Object.freeze({
+    baseUrl: `https://api.telegram.org/bot${WEBHOOK_URL_TOKEN}/sendMessage`,
+    // Telegram nimmt 4096 Zeichen je Nachricht; Rand fuer Titel und JSON.
+    maxLength: 4000,
+    // "123456789:AA..." - wer "bot123:AA..." aus der Adresse kopiert, meint dasselbe.
+    token: (raw) => String(raw ?? '').trim().replace(/^bot/, ''),
+    tokenValid: (value) => /^\d{3,20}:[A-Za-z0-9_-]{20,80}$/.test(value),
+    tokenError: 'The Telegram bot token must look like 123456789:AA...',
+    template: (config) => JSON.stringify({ chat_id: config.chatId, text: '{{title}}\n\n{{body}}' }),
+  }),
+  discord: Object.freeze({
+    baseUrl: `https://discord.com/api/webhooks/${WEBHOOK_URL_TOKEN}`,
+    // Discord nimmt 2000 Zeichen in `content`.
+    maxLength: 1900,
+    // Eingefuegt wird meist die ganze Webhook-Adresse; gespeichert wird nur
+    // "<id>/<token>", der Rest ist die feste Adresse oben.
+    token: (raw) => String(raw ?? '').trim()
+      .replace(/^https:\/\/(?:ptb\.|canary\.)?discord(?:app)?\.com\/api\/webhooks\//i, '')
+      .replace(/[?#].*$/, '').replace(/\/+$/, ''),
+    tokenValid: (value) => /^\d{5,25}\/[A-Za-z0-9_-]{20,100}$/.test(value),
+    tokenError: 'The Discord webhook address must look like https://discord.com/api/webhooks/123/abc...',
+    template: () => JSON.stringify({ content: '**{{title}}**\n{{body}}' }),
+  }),
+});
+
+// Chat-ID einer Person oder Gruppe (auch negativ, Kanaele mit -100...) oder
+// ein oeffentlicher @kanalname.
+function normalizeTelegramChatId(value) {
+  const raw = String(value ?? '').trim();
+  if (!/^-?\d{1,20}$/.test(raw) && !/^@[A-Za-z][A-Za-z0-9_]{3,31}$/.test(raw)) {
+    throw new Error('A Telegram chat ID is required (a number like 123456789 or -100..., or @channelname).');
+  }
+  return raw;
+}
+
+function normalizePresetConfig(preset, input = {}) {
+  const def = WEBHOOK_PRESETS[preset];
+  const config = { preset, baseUrl: def.baseUrl, maxLength: def.maxLength };
+  if (preset === 'telegram') config.chatId = normalizeTelegramChatId(input.chatId);
+  config.payloadTemplate = def.template(config);
+  return config;
+}
+
+/** Eine eigene Adresse mit `{{token}}`: der Platzhalter muss im Pfad stehen. */
+function normalizeTokenUrl(raw) {
+  const marker = 'yuvomi-url-token-0';
+  if (raw.split(WEBHOOK_URL_TOKEN).length !== 2) throw new Error('Use {{token}} at most once in the webhook address.');
+  const checked = normalizeBaseUrl(raw.replace(WEBHOOK_URL_TOKEN, marker), { keepPath: true });
+  const url = new URL(checked);
+  if (!url.pathname.includes(marker)) throw new Error('{{token}} may only stand in the path of the webhook address.');
+  return checked.replace(marker, WEBHOOK_URL_TOKEN);
+}
+
 function normalizeWebhookConfig(input = {}) {
+  const preset = String(input.preset ?? '').trim();
+  if (preset) {
+    if (!Object.hasOwn(WEBHOOK_PRESETS, preset)) throw new Error('Unknown webhook preset.');
+    return normalizePresetConfig(preset, input);
+  }
   const payloadTemplate = String(input.payloadTemplate ?? '').trim();
   if (payloadTemplate) {
     if (payloadTemplate.length > MAX_WEBHOOK_TEMPLATE_LENGTH) {
@@ -165,11 +235,32 @@ function normalizeWebhookConfig(input = {}) {
       throw new Error('Webhook payload template must produce valid JSON.');
     }
   }
-  return { baseUrl: normalizeBaseUrl(input.baseUrl, { keepPath: true }), payloadTemplate };
+  const rawUrl = String(input.baseUrl ?? '').trim();
+  const baseUrl = rawUrl.includes(WEBHOOK_URL_TOKEN) ? normalizeTokenUrl(rawUrl) : normalizeBaseUrl(rawUrl, { keepPath: true });
+  const maxLength = Number(input.maxLength);
+  return {
+    baseUrl,
+    payloadTemplate,
+    ...(Number.isInteger(maxLength) && maxLength >= 100 && maxLength <= 100000 ? { maxLength } : {}),
+  };
 }
 
-function normalizeWebhookSecrets(input = {}) {
-  return { token: String(input.token ?? '').trim() };
+function normalizeWebhookSecrets(input = {}, config = {}) {
+  const def = WEBHOOK_PRESETS[config.preset];
+  const raw = String(input.token ?? '').trim();
+  return { token: def && raw ? def.token(raw) : raw };
+}
+
+function validateWebhook({ config, secrets, requireSecrets }) {
+  if (!String(config.baseUrl).includes(WEBHOOK_URL_TOKEN)) return;
+  const def = WEBHOOK_PRESETS[config.preset];
+  if (!secrets.token) {
+    if (requireSecrets) throw new Error(def ? def.tokenError : 'This webhook address needs a token for {{token}}.');
+    return;
+  }
+  if (def ? !def.tokenValid(secrets.token) : !urlTokenValid(secrets.token)) {
+    throw new Error(def ? def.tokenError : 'The token for {{token}} contains characters that cannot stand in an address.');
+  }
 }
 
 /**
@@ -253,8 +344,11 @@ export function normalizeChannelInput(input = {}, existing = null) {
     config = normalizeEmailConfig(mergedConfig);
     secrets = {};
   } else {
+    // Die Vorlage bleibt beim Bearbeiten, solange niemand ausdruecklich eine
+    // andere (oder keine: '') schickt; ihre Felder kommen aus dem Bestand.
     config = normalizeWebhookConfig(mergedConfig);
-    secrets = normalizeWebhookSecrets(mergedSecrets);
+    secrets = normalizeWebhookSecrets(mergedSecrets, config);
+    validateWebhook({ config, secrets, requireSecrets: !existing || input.secrets?.token !== undefined });
   }
 
   return {
@@ -365,6 +459,7 @@ export function createNotificationChannelStore({ db } = {}) {
 
   function deleteChannel(id) {
     const result = getDb().prepare('DELETE FROM notification_channels WHERE id = ?').run(id);
+    if (result.changes > 0) forgetDigestChannel(getDb(), id);
     return result.changes > 0;
   }
 
@@ -389,6 +484,13 @@ export function createNotificationChannelStore({ db } = {}) {
     `).all(userId).map((row) => dbRowToChannel(row, { includeSecrets: true }));
   }
 
+  /** Die persoenlichen Kanaele einer Person, ohne Geheimnisse. */
+  function listUserChannels(userId) {
+    return getDb().prepare("SELECT * FROM notification_channels WHERE scope = 'user' AND user_id = ? ORDER BY provider, name, id")
+      .all(userId)
+      .map((row) => publicChannel(dbRowToChannel(row)));
+  }
+
   return {
     listChannels,
     getChannel,
@@ -397,5 +499,6 @@ export function createNotificationChannelStore({ db } = {}) {
     deleteChannel,
     markChannelTestResult,
     listEnabledChannelsForUser,
+    listUserChannels,
   };
 }

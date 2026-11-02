@@ -74,6 +74,8 @@ export const PRIVATE_USER_COLUMNS = new Set([
   'user_recovery_codes.user_id',
   'idempotency_keys.user_id',
   'notification_channels.user_id',
+  'notification_personal_access.user_id',
+  'notification_digests.user_id',
   'family_document_access.user_id',
   'invites.accepted_user_id',
   // Was das Konto zu der Art Zeile macht, die es ist.
@@ -354,6 +356,9 @@ function deactivate(database, userId) {
   // NICHTS WIRD MEHR ZUGESTELLT.
   database.prepare('DELETE FROM push_subscriptions WHERE user_id = ?').run(userId);
   database.prepare('DELETE FROM notification_channels WHERE user_id = ?').run(userId);
+  // Freigabe und Tagesvorschau (Migration 276) gehoeren nur der Person.
+  database.prepare('DELETE FROM notification_personal_access WHERE user_id = ?').run(userId);
+  database.prepare('DELETE FROM notification_digests WHERE user_id = ?').run(userId);
   // Die eigenen, noch nicht ausgeloesten Erinnerungen. Schon zugestellte
   // bleiben als Verlauf; die Zustellung selbst fragt zusaetzlich den
   // Aktiv-Zustand, falls ein Abgleich eine Zeile neu anlegt.

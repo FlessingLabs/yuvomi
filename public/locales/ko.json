@@ -3480,7 +3480,39 @@
         "memberRemoveLastAdmin": "관리자는 최소 한 명 남아 있어야 합니다.",
         "memberRemoveLastSsoAdmin": "SSO에 연결된 마지막 관리자입니다. 먼저 다른 관리자를 연결하세요.",
         "backupWebdavUrlInvalid": "주소는 http:// 또는 https://로 시작해야 합니다.",
-        "icsSubscriptionGone": "이 구독은 더 이상 존재하지 않습니다."
+        "icsSubscriptionGone": "이 구독은 더 이상 존재하지 않습니다.",
+        "pageMessenger": "메신저",
+        "pageMessengerDescription": "텔레그램과 디스코드, 하루 미리보기를 설정합니다.",
+        "messenger": {
+            "mineTitle": "내 수신처",
+            "mineHint": "알림과 하루 미리보기가 이 수신처로도 전송됩니다.",
+            "notAllowed": "관리자가 내 수신처 설정을 허용할 수 있습니다.",
+            "empty": "아직 설정된 수신처가 없습니다.",
+            "service": "서비스",
+            "telegramToken": "봇 토큰",
+            "telegramTokenHint": "@BotFather 제공, 123456789:AA... 형태입니다",
+            "telegramChat": "채팅 ID",
+            "telegramChatHint": "내 채팅 ID 또는 그룹의 채팅 ID. 먼저 봇에게 한 번 메시지를 보내세요.",
+            "discordUrl": "웹훅 주소",
+            "discordUrlHint": "디스코드: 채널 편집, 연동, 웹후크, 웹후크 URL 복사.",
+            "testFailed": "전송 실패: {{error}}",
+            "digestTitle": "내 하루 미리보기",
+            "digestEnabled": "하루 미리보기 보내기",
+            "digestTime": "시간",
+            "digestDay": "미리보기 날짜",
+            "digestSections": "내용",
+            "digestSectionsHint": "생일은 일주일 전부터 매번 미리보기에 표시됩니다.",
+            "digestTargets": "보낼 곳",
+            "digestTargetsHint": "아무것도 선택하지 않으면 모든 수신처로 보냅니다.",
+            "digestTest": "지금 테스트",
+            "digestSaved": "저장했습니다.",
+            "accessTitle": "내 수신처를 설정할 수 있는 사람",
+            "accessHint": "관리자는 항상 가능합니다.",
+            "householdTitle": "가족 수신처",
+            "householdHint": "예: 텔레그램 그룹. 모두가 볼 수 있는 알림이 여기로 옵니다.",
+            "householdDigestTitle": "가족 미리보기",
+            "householdDigestHint": "가족 수신처로 가며 모두가 볼 수 있는 내용만 보여 줍니다."
+        }
     },
     "login": {
         "tagline": "다시 오신 것을 환영합니다. 우리 집의 모든 일을 한곳에서.",
@@ -6777,5 +6809,22 @@
         "custom": "사용자 지정 색상",
         "chooseCustom": "사용자 지정 색상 선택",
         "standard": "기본 색상"
+    },
+    "messenger": {
+        "digest": {
+            "titleToday": "오늘 {{date}}",
+            "titleTomorrow": "내일 {{date}}",
+            "allDay": "종일",
+            "birthdayToday": "오늘",
+            "nameDay": "영명 축일",
+            "nothing": "예정된 일이 없습니다.",
+            "section": {
+                "events": "일정",
+                "tasks": "할 일",
+                "birthdays": "생일",
+                "waste": "쓰레기 수거",
+                "shopping": "장보기 목록"
+            }
+        }
     }
 }
