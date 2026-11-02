@@ -3512,7 +3512,21 @@
             "householdHint": "Zum Beispiel eine Telegram-Gruppe. Hierhin gehen Erinnerungen, die alle sehen dürfen.",
             "householdDigestTitle": "Familien-Vorschau",
             "householdDigestHint": "Geht an die Ziele der Familie und zeigt nur, was alle sehen dürfen."
-        }
+        },
+        "moduleUpdateAvailable": "Update verfügbar: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "Eine neue Fassung ist verfügbar.",
+        "moduleUpdateApply": "Jetzt aktualisieren",
+        "moduleUpdateLater": "Später",
+        "moduleUpdateCheck": "Auf Updates prüfen",
+        "moduleUpdateChecked": "Zuletzt geprüft: {{date}}",
+        "moduleUpdateNotChecked": "Noch nicht auf Updates geprüft.",
+        "moduleUpdateAllCurrent": "Alle Module aus GitHub sind aktuell.",
+        "moduleUpdateNeedsWebInstall": "Einspielen geht erst, wenn MODULES_ALLOW_WEB_INSTALL eingeschaltet ist.",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} ist installiert. Jetzt einschalten?",
+        "moduleUpdateEnableDetail": "Jede neue Fassung kommt ausgeschaltet an, damit nichts ungesehen live geht.",
+        "moduleUpdateEnable": "Einschalten",
+        "moduleUpdateUpToDate": "Dieses Modul ist schon aktuell.",
+        "moduleUpdateCheckFailed": "Die letzte Prüfung auf Updates ist fehlgeschlagen."
     },
     "login": {
         "tagline": "Willkommen zurück. Dein Zuhause an einem Ort.",

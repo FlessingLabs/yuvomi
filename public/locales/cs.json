@@ -3612,7 +3612,21 @@
             "householdHint": "Například skupina v Telegramu. Sem jdou připomínky, které smí vidět všichni.",
             "householdDigestTitle": "Rodinný přehled",
             "householdDigestHint": "Jde do cílů rodiny a ukazuje jen to, co smí vidět všichni."
-        }
+        },
+        "moduleUpdateAvailable": "Dostupná aktualizace: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "Je dostupná nová verze.",
+        "moduleUpdateApply": "Aktualizovat teď",
+        "moduleUpdateLater": "Později",
+        "moduleUpdateCheck": "Zkontrolovat aktualizace",
+        "moduleUpdateChecked": "Naposledy zkontrolováno: {{date}}",
+        "moduleUpdateNotChecked": "Aktualizace zatím nebyly kontrolovány.",
+        "moduleUpdateAllCurrent": "Všechny moduly z GitHubu jsou aktuální.",
+        "moduleUpdateNeedsWebInstall": "Aktualizace vyžaduje zapnuté MODULES_ALLOW_WEB_INSTALL.",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} je nainstalován. Zapnout teď?",
+        "moduleUpdateEnableDetail": "Každá nová verze přichází vypnutá, aby nic nešlo do provozu bez kontroly.",
+        "moduleUpdateEnable": "Zapnout",
+        "moduleUpdateUpToDate": "Tento modul je už aktuální.",
+        "moduleUpdateCheckFailed": "Poslední kontrola aktualizací selhala."
     },
     "login": {
         "tagline": "Vítejte zpět. Váš domov na jednom místě.",

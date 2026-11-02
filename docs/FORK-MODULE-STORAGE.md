@@ -6,7 +6,7 @@ This branch (`feat/module-storage` of [FlessingLabs/yuvomi](https://github.com/F
 
 | Area | Change |
 |---|---|
-| Database | Migration 274 creates `module_records`; migration 275 adds `module_records.subject_id` and `module_person_grants` (owned by Yuvomi; only Yuvomi writes them). Branch `feat/notifications` adds migration 276 (`notification_personal_access`, `notification_digests`) |
+| Database | Migration 274 creates `module_records`; migration 275 adds `module_records.subject_id` and `module_person_grants` (owned by Yuvomi; only Yuvomi writes them). Branch `feat/notifications` adds migration 276 (`notification_personal_access`, `notification_digests`), branch `feat/module-updates` migration 277 (`module_update_state`) |
 | API | `GET/POST /api/v1/modules/:moduleId/records`, `GET/PUT/DELETE .../records/:recordId`, `GET .../people`, admin `GET .../grants` and `PUT .../grants/:subjectId`, admin `GET /api/v1/modules/storage` and `DELETE /api/v1/modules/:moduleId/records` (purge) |
 | Rights | `server/scopes.js` maps `/modules/<id>/records` to `ext:<id>`; modules that declare only `capabilities.permissions.module` get token scopes too |
 | Workflows | `docker-publish.yml` and `umbrel-publish.yml` run only in `ulsklyc/yuvomi`; `fork-test-image.yml` builds, tests and publishes the test image |
@@ -26,9 +26,9 @@ Not by swapping the image. The fork's database carries migrations the official r
 
 ## Maintenance duty when following upstream
 
-Yuvomi records applied migrations one by one (`schema_migrations`) and requires gap-free numbers. Once upstream adds its own migrations 274, 275 or 276, rebasing this branch must:
+Yuvomi records applied migrations one by one (`schema_migrations`) and requires gap-free numbers. Once upstream adds its own migrations 274 to 277, rebasing this branch must:
 
-1. move the module storage migrations behind upstream's last number (274 uses `CREATE TABLE IF NOT EXISTS`; 275's `ALTER TABLE ... ADD COLUMN` must then be guarded by a column check; 276 only creates tables and indexes `IF NOT EXISTS`), and
-2. add a repair step for databases that already ran the fork's 274/275: if `schema_migrations` has version 274 with the description `Persistent household JSON records for third-party modules` (or 275 with `Module storage: records that belong to one person, and per-person grants`, or 276 with `Notifications: who may set up personal channels, and the daily preview`), remove that row so upstream's migration of the same number runs, and let the renumbered migration record itself.
+1. move the module storage migrations behind upstream's last number (274 uses `CREATE TABLE IF NOT EXISTS`; 275's `ALTER TABLE ... ADD COLUMN` must then be guarded by a column check; 276 and 277 only create tables and indexes `IF NOT EXISTS`), and
+2. add a repair step for databases that already ran the fork's 274/275: if `schema_migrations` has version 274 with the description `Persistent household JSON records for third-party modules` (or 275 with `Module storage: records that belong to one person, and per-person grants`, or 276 with `Notifications: who may set up personal channels, and the daily preview`, or 277 with `Modules: the result of the daily update check per installed module`), remove that row so upstream's migration of the same number runs, and let the renumbered migration record itself.
 
-Without step 2, upstream's own 274/275/276 would be skipped silently on every fork database. Do not publish a rebased image before that step exists and is tested.
+Without step 2, upstream's own 274 to 277 would be skipped silently on every fork database. Do not publish a rebased image before that step exists and is tested.

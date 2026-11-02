@@ -3494,7 +3494,21 @@
             "householdHint": "For example a Telegram group. Reminders everyone may see go here.",
             "householdDigestTitle": "Family preview",
             "householdDigestHint": "Goes to the family targets and shows only what everyone may see."
-        }
+        },
+        "moduleUpdateAvailable": "Update available: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "A new version is available.",
+        "moduleUpdateApply": "Update now",
+        "moduleUpdateLater": "Later",
+        "moduleUpdateCheck": "Check for updates",
+        "moduleUpdateChecked": "Last checked: {{date}}",
+        "moduleUpdateNotChecked": "Not checked for updates yet.",
+        "moduleUpdateAllCurrent": "All modules from GitHub are up to date.",
+        "moduleUpdateNeedsWebInstall": "Updating needs MODULES_ALLOW_WEB_INSTALL to be switched on.",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} is installed. Switch it on now?",
+        "moduleUpdateEnableDetail": "Every new version arrives switched off, so nothing goes live unseen.",
+        "moduleUpdateEnable": "Switch on",
+        "moduleUpdateUpToDate": "This module is already up to date.",
+        "moduleUpdateCheckFailed": "The last update check failed."
     },
     "login": {
         "tagline": "Welcome back. Your home in one place.",

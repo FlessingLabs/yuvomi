@@ -3494,7 +3494,21 @@
             "householdHint": "Örneğin bir Telegram grubu. Herkesin görebileceği hatırlatıcılar buraya gelir.",
             "householdDigestTitle": "Aile önizlemesi",
             "householdDigestHint": "Ailenin hedeflerine gider ve yalnızca herkesin görebileceğini gösterir."
-        }
+        },
+        "moduleUpdateAvailable": "Güncelleme mevcut: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "Yeni bir sürüm mevcut.",
+        "moduleUpdateApply": "Şimdi güncelle",
+        "moduleUpdateLater": "Sonra",
+        "moduleUpdateCheck": "Güncellemeleri denetle",
+        "moduleUpdateChecked": "Son denetim: {{date}}",
+        "moduleUpdateNotChecked": "Henüz güncelleme denetlenmedi.",
+        "moduleUpdateAllCurrent": "GitHub'daki tüm modüller güncel.",
+        "moduleUpdateNeedsWebInstall": "Güncelleme için MODULES_ALLOW_WEB_INSTALL açık olmalı.",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} kuruldu. Şimdi açılsın mı?",
+        "moduleUpdateEnableDetail": "Her yeni sürüm kapalı gelir, böylece hiçbir şey görülmeden yayına girmez.",
+        "moduleUpdateEnable": "Aç",
+        "moduleUpdateUpToDate": "Bu modül zaten güncel.",
+        "moduleUpdateCheckFailed": "Son güncelleme denetimi başarısız oldu."
     },
     "login": {
         "tagline": "Tekrar hoş geldin. Evin tek bir yerde.",

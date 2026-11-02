@@ -3494,7 +3494,21 @@
             "householdHint": "Till exempel en Telegram-grupp. Hit går påminnelser som alla får se.",
             "householdDigestTitle": "Familjeöversikt",
             "householdDigestHint": "Går till familjens mål och visar bara det alla får se."
-        }
+        },
+        "moduleUpdateAvailable": "Uppdatering tillgänglig: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "En ny version finns.",
+        "moduleUpdateApply": "Uppdatera nu",
+        "moduleUpdateLater": "Senare",
+        "moduleUpdateCheck": "Sök efter uppdateringar",
+        "moduleUpdateChecked": "Senast kontrollerat: {{date}}",
+        "moduleUpdateNotChecked": "Inga uppdateringar har sökts än.",
+        "moduleUpdateAllCurrent": "Alla moduler från GitHub är aktuella.",
+        "moduleUpdateNeedsWebInstall": "Uppdatering kräver att MODULES_ALLOW_WEB_INSTALL är påslaget.",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} är installerad. Slå på nu?",
+        "moduleUpdateEnableDetail": "Varje ny version kommer avstängd, så att inget går live osett.",
+        "moduleUpdateEnable": "Slå på",
+        "moduleUpdateUpToDate": "Den här modulen är redan aktuell.",
+        "moduleUpdateCheckFailed": "Den senaste sökningen efter uppdateringar misslyckades."
     },
     "login": {
         "tagline": "Välkommen tillbaka. Ditt hem samlat på ett ställe.",

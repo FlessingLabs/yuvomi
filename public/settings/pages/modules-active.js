@@ -2,7 +2,7 @@ import { api } from '/api.js';
 import { t } from '/i18n.js';
 import { dateTimeText } from '/utils/date-format.js';
 import { esc } from '/utils/html.js';
-import { confirmModal, refocusAfterRender } from '/components/modal.js';
+import { captureOpenContext, confirmModal, isModalContextCurrent, refocusAfterRender } from '/components/modal.js';
 import { rowMenuHtml } from '/utils/row-action.js';
 import { installPopoverMenus } from '/utils/popover-menu.js';
 import { emptyStateEl } from '/utils/empty-state.js';
@@ -30,6 +30,7 @@ import { moduleAccentVar } from '/utils/module-accent.js';
 import { moduleDisplayLabel } from '/utils/extension-i18n.js';
 import { deleteErrorText, installErrorText } from '/settings/module-install-errors.js';
 import { errorSentence, loadErrorSentence } from '/utils/friendly-error.js';
+import { reloadAfterSave } from '/utils/reload-after-save.js';
 
 /**
  * Blatt: Einstellungen -> Module -> Aktive Module (adminOnly)
@@ -470,10 +471,39 @@ function bindEvents(container, user) {
     }
   });
 
-  list.addEventListener('click', (event) => {
+  list.addEventListener('click', async (event) => {
+    const apply = event.target.closest('[data-module-update-apply]');
+    if (apply) { await applyModuleUpdate(container, user, apply); return; }
+    const later = event.target.closest('[data-module-update-later]');
+    if (later) {
+      later.disabled = true;
+      const id = later.closest('[data-module-update]').dataset.moduleUpdate;
+      try {
+        await api.post(`/modules/updates/${encodeURIComponent(id)}/snooze`, {});
+      } catch (error) {
+        later.disabled = false;
+        window.yuvomi?.showToast(errorSentence(error), 'danger');
+        return;
+      }
+      await reloadAfterSave(() => renderActiveModules(container, user));
+      return;
+    }
     const button = event.target.closest('[data-module-delete]');
     if (!button) return;
     deleteThirdPartyModule(container, user, button);
+  });
+
+  container.querySelector('[data-module-update-check]')?.addEventListener('click', async (event) => {
+    const check = event.currentTarget;
+    check.disabled = true;
+    try {
+      await api.post('/modules/updates/check', {});
+    } catch (error) {
+      check.disabled = false;
+      window.yuvomi?.showToast(error?.data?.reason ? installErrorText(error) : errorSentence(error), 'danger');
+      return;
+    }
+    await reloadAfterSave(() => renderActiveModules(container, user));
   });
 }
 
@@ -574,6 +604,81 @@ export async function render(container, { user }) {
   await renderActiveModules(container, user);
 }
 
+/**
+ * UPDATES AUS GITHUB (Migration 277). Die Pruefung laeuft taeglich auf dem
+ * Server; hier steht nur ihr Befund. "Jetzt aktualisieren" ist eine Ersetzung
+ * wie "Eigenes Modul hinzufuegen": das Modul kommt ausgeschaltet an, und die
+ * Seite fragt danach gleich, ob es eingeschaltet werden soll - nichts geht
+ * ungesehen live. "Spaeter" blendet genau diesen Stand aus.
+ */
+function updateSummaryHtml(updates) {
+  if (!updates?.length) return '';
+  const checked = updates.map((u) => u.checkedAt).filter(Boolean).sort().at(-1);
+  const pending = updates.some((u) => u.available);
+  const text = !checked ? t('settings.moduleUpdateNotChecked')
+    : pending ? t('settings.moduleUpdateChecked', { date: dateTimeText(new Date(checked)) })
+      : `${t('settings.moduleUpdateAllCurrent')} ${t('settings.moduleUpdateChecked', { date: dateTimeText(new Date(checked)) })}`;
+  return `<div class="settings-form-actions settings-module-updates">
+      <p class="form-hint">${esc(text)}</p>
+      <button type="button" class="btn btn--secondary" data-module-update-check>${esc(t('settings.moduleUpdateCheck'))}</button>
+    </div>`;
+}
+
+function updateRowHtml(update, canApply) {
+  if (!update.available && !update.error) return '';
+  if (!update.available) return `<p class="form-hint settings-module-update">${esc(t('settings.moduleUpdateCheckFailed'))}</p>`;
+  const text = update.latestVersion && update.latestVersion !== update.installedVersion
+    ? t('settings.moduleUpdateAvailable', { from: update.installedVersion || '?', to: update.latestVersion })
+    : t('settings.moduleUpdateAvailableNew');
+  return `<div class="settings-module-update" data-module-update="${esc(update.id)}">
+      <p class="settings-module-update__text">${esc(text)}</p>
+      ${canApply ? `<div class="settings-form-actions">
+        <button type="button" class="btn btn--secondary" data-module-update-later>${esc(t('settings.moduleUpdateLater'))}</button>
+        <button type="button" class="btn btn--primary" data-module-update-apply>${esc(t('settings.moduleUpdateApply'))}</button>
+      </div>` : `<p class="form-hint">${esc(t('settings.moduleUpdateNeedsWebInstall'))}</p>`}
+    </div>`;
+}
+
+async function applyModuleUpdate(container, user, button) {
+  const box = button.closest('[data-module-update]');
+  const id = box.dataset.moduleUpdate;
+  // Die Frage nach dem Einschalten kommt aus der Antwort: der Kontext wird VOR
+  // der Anfrage festgehalten, und gefragt wird nur, solange er noch gilt (#1997).
+  const context = captureOpenContext();
+  button.disabled = true;
+  let module;
+  try {
+    module = (await api.post(`/modules/updates/${encodeURIComponent(id)}/apply`, {}))?.data;
+  } catch (error) {
+    button.disabled = false;
+    window.yuvomi?.showToast(error?.data?.reason ? installErrorText(error) : errorSentence(error), 'danger');
+    return;
+  }
+  await reloadAfterSave(() => renderActiveModules(container, user));
+  // Jede Ersetzung kommt ausgeschaltet an. Die Frage danach ist die Freigabe
+  // durch den Admin - ein eigener, bewusster Klick. Hat er die Seite inzwischen
+  // verlassen, bleibt es beim Hinweis; einschalten kann er in der Zeile.
+  if (!isModalContextCurrent(context)) {
+    window.yuvomi?.showToast(t('settings.moduleUpdateEnableConfirm', { name: moduleDisplayLabel(module), version: module?.version ?? '' }), 'success');
+    return;
+  }
+  const enable = await confirmModal(t('settings.moduleUpdateEnableConfirm', { name: moduleDisplayLabel(module), version: module?.version ?? '' }), {
+    confirmLabel: t('settings.moduleUpdateEnable'),
+    detail: t('settings.moduleUpdateEnableDetail'),
+  });
+  if (!enable) return;
+  try {
+    await api.patch(`/modules/${encodeURIComponent(id)}`, { enabled: true });
+    await window.yuvomi?.refreshThirdPartyModules?.();
+  } catch (error) {
+    window.yuvomi?.showToast(error?.data?.reason ? installErrorText(error) : errorSentence(error), 'danger');
+    return;
+  }
+  window.yuvomi?.showToast(t('settings.thirdPartyModulesSaved'), 'success');
+  await reloadAfterSave(() => renderActiveModules(container, user));
+  refocusAfterRender();
+}
+
 async function renderActiveModules(container, user) {
   container.replaceChildren();
 
@@ -586,16 +691,20 @@ async function renderActiveModules(container, user) {
   // Der Leerzustand "noch kein eigenes Modul" nur nach einer ERFOLGREICHEN,
   // leeren Antwort - ein Ladefehler ist kein leerer Bestand (utils/empty-state.js).
   let modulesLoaded = false;
+  // Der Befund der Update-Pruefung; ein Fehler dort ist kein Ladefehler des Blatts.
+  let updates = [];
   try {
-    const [prefs, modules, info] = await Promise.all([
+    const [prefs, modules, info, found] = await Promise.all([
       getPreferences(),
       api.get('/modules?admin=1').then((res) => res?.data ?? []).catch(() => null),
       api.get('/modules/install/info').then((res) => res?.data ?? null).catch(() => null),
+      api.get('/modules/updates').then((res) => res?.data ?? []).catch(() => []),
     ]);
     preferences = prefs ?? {};
     modulesLoaded = Array.isArray(modules);
     thirdPartyModules = modulesLoaded ? modules : [];
     installInfo = info;
+    updates = Array.isArray(found) ? found : [];
   } catch (error) {
     container.insertAdjacentHTML('beforeend',
       `<p class="form-error" role="alert">${esc(loadErrorSentence(error) ?? t('common.errorGeneric'))}</p>`);
@@ -610,6 +719,7 @@ async function renderActiveModules(container, user) {
         <h2 class="settings-navigation-panel__title">${t('settings.activeModulesTitle')}</h2>
         ${/* Hoechstens ein Satz vor dem ersten Feld (R23 D14), der Rest hinter "Mehr dazu". */ ''}
         ${hintFoldHtml({ lead: t('settings.activeModulesHint'), moreHtml: `<p>${esc(t('settings.activeModulesHintMore'))}</p>` })}
+        ${updateSummaryHtml(updates)}
         <div class="settings-navigation-groups" id="module-toggles">
           ${NAV_SECTIONS.map((section) => sectionHtml(section, rows)).join('')}
         </div>
@@ -622,6 +732,8 @@ async function renderActiveModules(container, user) {
     const row = [...(groups?.querySelectorAll('[data-module-row-id]') ?? [])]
       .find((el) => el.dataset.moduleRowId === module.id);
     row?.appendChild(moduleDetailsElement(module));
+    const update = updates.find((u) => u.id === module.id);
+    if (update) row?.querySelector('.settings-module-row__body')?.insertAdjacentHTML('beforeend', updateRowHtml(update, deleteOffered(installInfo)));
   }
   if (modulesLoaded && !thirdPartyModules.length) groups?.appendChild(emptyCustomModulesElement());
 

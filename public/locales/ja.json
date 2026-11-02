@@ -3494,7 +3494,21 @@
             "householdHint": "たとえば Telegram のグループ。全員が見られるリマインダーがここに届きます。",
             "householdDigestTitle": "家族のまとめ",
             "householdDigestHint": "家族の送信先に届き、全員が見られる内容だけを表示します。"
-        }
+        },
+        "moduleUpdateAvailable": "更新があります: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "新しいバージョンがあります。",
+        "moduleUpdateApply": "今すぐ更新",
+        "moduleUpdateLater": "あとで",
+        "moduleUpdateCheck": "更新を確認",
+        "moduleUpdateChecked": "最終確認: {{date}}",
+        "moduleUpdateNotChecked": "まだ更新を確認していません。",
+        "moduleUpdateAllCurrent": "GitHub のモジュールはすべて最新です。",
+        "moduleUpdateNeedsWebInstall": "更新するには MODULES_ALLOW_WEB_INSTALL をオンにする必要があります。",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} をインストールしました。今すぐオンにしますか？",
+        "moduleUpdateEnableDetail": "新しいバージョンは毎回オフの状態で届きます。確認しないまま公開されることはありません。",
+        "moduleUpdateEnable": "オンにする",
+        "moduleUpdateUpToDate": "このモジュールはすでに最新です。",
+        "moduleUpdateCheckFailed": "前回の更新確認に失敗しました。"
     },
     "login": {
         "tagline": "おかえりなさい。暮らしのことを一か所に。",

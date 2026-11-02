@@ -19,6 +19,7 @@ import { requireAdmin } from '../auth.js';
 import { isAdminRequest } from '../middleware/require-admin.js';
 import { createLogger } from '../logger.js';
 import { MODULES_DIR, listModules, resolveAssetPath, setModuleEnabled } from '../services/modules.js';
+import { applyModuleUpdate, checkModuleUpdates, listModuleUpdates, snoozeModuleUpdate } from '../services/module-updates.js';
 import {
   InstallError,
   MAX_ZIP_MB,
@@ -195,6 +196,42 @@ function pathOption(value) {
 function installBody(result) {
   return { data: result.module, replaced: result.replaced, skipped: result.skipped };
 }
+
+// ── Update-Pruefung (Migration 277) ─────────────────────────────────────────
+// Lesen und "Spaeter" fuer jeden Admin; Pruefen fragt GitHub und ist deshalb
+// gebremst wie ein Install-Versuch. Einspielen ist eine Ersetzung: dieselben
+// Schranken wie das Installieren (Schalter, Browser-Sitzung, Bremse), und das
+// Modul kommt ausgeschaltet an.
+router.get('/updates', requireAdmin, async (_req, res) => {
+  try {
+    res.json({ data: await listModuleUpdates() });
+  } catch (err) {
+    log.error('Module update list failed:', err);
+    res.status(500).json({ error: 'Module update list failed.', code: 500 });
+  }
+});
+
+router.post('/updates/check', requireAdmin, installAttemptLimiter, async (_req, res) => {
+  try {
+    res.json({ data: await checkModuleUpdates() });
+  } catch (err) {
+    sendInstallError(res, err, 'Module update check failed');
+  }
+});
+
+router.post('/updates/:id/snooze', requireAdmin, (req, res) => {
+  if (!snoozeModuleUpdate(req.params.id)) return res.status(404).json({ error: 'No update found for this module.', code: 404 });
+  res.json({ data: { snoozed: true } });
+});
+
+router.post('/updates/:id/apply', requireAdmin, requireWebInstall, requireBrowserSession, installAttemptLimiter, installLimiter, async (req, res) => {
+  try {
+    const result = await applyModuleUpdate(req.params.id, { userId: req.authUserId });
+    res.status(201).json(installBody(result));
+  } catch (err) {
+    sendInstallError(res, err, 'Module update failed');
+  }
+});
 
 // Static /install/* paths before any /:id route.
 router.get('/install/info', requireAdmin, async (_req, res) => {

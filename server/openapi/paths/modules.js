@@ -305,6 +305,55 @@ export function modulesPaths() {
         },
       }),
     },
+    '/api/v1/modules/updates': {
+      get: op({
+        summary: 'Update check results for modules installed from GitHub',
+        tag: 'Modules',
+        admin: true,
+        description: 'Once a day (and on demand) the server asks GitHub for the newest version of every module installed from Settings out of a GitHub repository: the newest release when it was installed from a release, otherwise the newest commit of its branch. Each entry carries the installed and the found version and commit, `available` (a newer commit that was not put off with `snooze`), `snoozed` and the last `error`. Hand-copied modules and ZIP uploads have no source and do not appear. Nothing is updated by itself.',
+      }),
+    },
+    '/api/v1/modules/updates/check': {
+      post: op({
+        summary: 'Check for module updates now',
+        tag: 'Modules',
+        admin: true,
+        stateChanging: true,
+        description: 'Runs the check at once and answers with the same list as GET /api/v1/modules/updates. Counts against the install attempt limit (30 per 10 minutes); an error with one repository stays at that module. 429 `install_rate_limited` when the limit is reached.',
+        responses: {
+          200: { description: 'The update check results' },
+          429: { description: 'Too many attempts (`install_rate_limited`)', content: errorContent() },
+        },
+      }),
+    },
+    '/api/v1/modules/updates/{id}/snooze': {
+      post: op({
+        summary: 'Put off a found module update',
+        tag: 'Modules',
+        admin: true,
+        stateChanging: true,
+        params: [stringPathParam('id', 'Module id')],
+        description: 'Hides exactly the found version; a newer one is reported again.',
+      }),
+    },
+    '/api/v1/modules/updates/{id}/apply': {
+      post: op({
+        summary: 'Install the found update of a module',
+        tag: 'Modules',
+        admin: true,
+        stateChanging: true,
+        params: [stringPathParam('id', 'Module id')],
+        description: `Replaces the module with the found version from the same repository and folder, like Add custom module with overwrite. ${INSTALL_NOTE} 404 \`not_found\` for a module not installed from GitHub; 409 \`up_to_date\` when the found version is already installed.`,
+        responses: {
+          201: { description: 'Replaced; the module is disabled until an admin enables it again' },
+          403: { description: 'Web install is switched off (`module_web_install_disabled`) or the request is not from a browser session (`module_session_required`)', content: errorContent() },
+          404: { description: 'Not installed from GitHub (`not_found`), or the repository or ref is gone (`repo_not_found`, `ref_not_found`)', content: errorContent() },
+          409: { description: 'Already up to date (`up_to_date`), or another install is running (`busy`)', content: errorContent() },
+          429: { description: 'Too many attempts (`install_rate_limited`) or GitHub rate limit (`rate_limited`)', content: errorContent() },
+          502: { description: 'GitHub failed (`github_failed`)', content: errorContent() },
+        },
+      }),
+    },
     '/api/v1/modules/install/info': {
       get: op({
         summary: 'Module install capabilities',

@@ -3494,7 +3494,21 @@
             "householdHint": "例如一个 Telegram 群组。所有人可见的提醒会发到这里。",
             "householdDigestTitle": "家庭预览",
             "householdDigestHint": "发送到家庭接收目标，只显示所有人都能看到的内容。"
-        }
+        },
+        "moduleUpdateAvailable": "有可用更新：{{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "有新版本可用。",
+        "moduleUpdateApply": "立即更新",
+        "moduleUpdateLater": "稍后",
+        "moduleUpdateCheck": "检查更新",
+        "moduleUpdateChecked": "上次检查：{{date}}",
+        "moduleUpdateNotChecked": "尚未检查更新。",
+        "moduleUpdateAllCurrent": "来自 GitHub 的模块均为最新。",
+        "moduleUpdateNeedsWebInstall": "需要开启 MODULES_ALLOW_WEB_INSTALL 才能更新。",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} 已安装。现在启用吗？",
+        "moduleUpdateEnableDetail": "每个新版本到达时都处于关闭状态，未经查看不会上线。",
+        "moduleUpdateEnable": "启用",
+        "moduleUpdateUpToDate": "此模块已是最新。",
+        "moduleUpdateCheckFailed": "上次检查更新失败。"
     },
     "login": {
         "tagline": "欢迎回来。您的家，尽在一处。",

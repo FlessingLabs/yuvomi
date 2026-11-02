@@ -3494,7 +3494,21 @@
             "householdHint": "Ví dụ một nhóm Telegram. Lời nhắc mọi người đều xem được sẽ đến đây.",
             "householdDigestTitle": "Bản xem trước của gia đình",
             "householdDigestHint": "Gửi đến điểm nhận của gia đình và chỉ hiện những gì mọi người đều xem được."
-        }
+        },
+        "moduleUpdateAvailable": "Có bản cập nhật: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "Có phiên bản mới.",
+        "moduleUpdateApply": "Cập nhật ngay",
+        "moduleUpdateLater": "Để sau",
+        "moduleUpdateCheck": "Kiểm tra cập nhật",
+        "moduleUpdateChecked": "Kiểm tra lần cuối: {{date}}",
+        "moduleUpdateNotChecked": "Chưa kiểm tra cập nhật.",
+        "moduleUpdateAllCurrent": "Mọi mô-đun từ GitHub đều đã mới nhất.",
+        "moduleUpdateNeedsWebInstall": "Cần bật MODULES_ALLOW_WEB_INSTALL để cập nhật.",
+        "moduleUpdateEnableConfirm": "Đã cài {{name}} {{version}}. Bật ngay bây giờ?",
+        "moduleUpdateEnableDetail": "Mỗi phiên bản mới đều đến ở trạng thái tắt, để không có gì chạy khi chưa được xem.",
+        "moduleUpdateEnable": "Bật",
+        "moduleUpdateUpToDate": "Mô-đun này đã mới nhất.",
+        "moduleUpdateCheckFailed": "Lần kiểm tra cập nhật gần nhất không thành công."
     },
     "login": {
         "tagline": "Chào mừng bạn trở lại. Ngôi nhà của bạn ở cùng một nơi.",

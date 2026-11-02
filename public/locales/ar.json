@@ -3834,7 +3834,21 @@
             "householdHint": "مثلًا مجموعة تيليجرام. تصل إلى هنا التذكيرات التي يراها الجميع.",
             "householdDigestTitle": "معاينة العائلة",
             "householdDigestHint": "تصل إلى وجهات العائلة ولا تعرض إلا ما يراه الجميع."
-        }
+        },
+        "moduleUpdateAvailable": "يتوفر تحديث: {{from}} ← {{to}}",
+        "moduleUpdateAvailableNew": "يتوفر إصدار جديد.",
+        "moduleUpdateApply": "حدّث الآن",
+        "moduleUpdateLater": "لاحقًا",
+        "moduleUpdateCheck": "التحقق من التحديثات",
+        "moduleUpdateChecked": "آخر تحقق: {{date}}",
+        "moduleUpdateNotChecked": "لم يتم التحقق من التحديثات بعد.",
+        "moduleUpdateAllCurrent": "كل الوحدات من GitHub محدّثة.",
+        "moduleUpdateNeedsWebInstall": "يتطلب التحديث تفعيل MODULES_ALLOW_WEB_INSTALL.",
+        "moduleUpdateEnableConfirm": "تم تثبيت {{name}} {{version}}. تفعيله الآن؟",
+        "moduleUpdateEnableDetail": "يصل كل إصدار جديد معطّلًا حتى لا يعمل شيء دون مراجعة.",
+        "moduleUpdateEnable": "تفعيل",
+        "moduleUpdateUpToDate": "هذه الوحدة محدّثة بالفعل.",
+        "moduleUpdateCheckFailed": "فشل آخر تحقق من التحديثات."
     },
     "login": {
         "tagline": "مرحبًا بعودتك. منزلك في مكان واحد.",

@@ -3494,7 +3494,21 @@
             "householdHint": "Για παράδειγμα μια ομάδα Telegram. Εδώ πάνε οι υπενθυμίσεις που βλέπουν όλοι.",
             "householdDigestTitle": "Οικογενειακή προεπισκόπηση",
             "householdDigestHint": "Πηγαίνει στους παραλήπτες της οικογένειας και δείχνει μόνο ό,τι βλέπουν όλοι."
-        }
+        },
+        "moduleUpdateAvailable": "Διαθέσιμη ενημέρωση: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "Υπάρχει νέα έκδοση.",
+        "moduleUpdateApply": "Ενημέρωση τώρα",
+        "moduleUpdateLater": "Αργότερα",
+        "moduleUpdateCheck": "Έλεγχος για ενημερώσεις",
+        "moduleUpdateChecked": "Τελευταίος έλεγχος: {{date}}",
+        "moduleUpdateNotChecked": "Δεν έχει γίνει ακόμη έλεγχος για ενημερώσεις.",
+        "moduleUpdateAllCurrent": "Όλες οι μονάδες από το GitHub είναι ενημερωμένες.",
+        "moduleUpdateNeedsWebInstall": "Η ενημέρωση απαιτεί ενεργό το MODULES_ALLOW_WEB_INSTALL.",
+        "moduleUpdateEnableConfirm": "Το {{name}} {{version}} εγκαταστάθηκε. Ενεργοποίηση τώρα;",
+        "moduleUpdateEnableDetail": "Κάθε νέα έκδοση φτάνει απενεργοποιημένη, ώστε τίποτα να μη μπαίνει σε λειτουργία χωρίς έλεγχο.",
+        "moduleUpdateEnable": "Ενεργοποίηση",
+        "moduleUpdateUpToDate": "Αυτή η μονάδα είναι ήδη ενημερωμένη.",
+        "moduleUpdateCheckFailed": "Ο τελευταίος έλεγχος για ενημερώσεις απέτυχε."
     },
     "login": {
         "tagline": "Καλώς ήρθατε ξανά. Το σπίτι σας σε ένα μέρος.",

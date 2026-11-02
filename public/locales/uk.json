@@ -3720,7 +3720,21 @@
             "householdHint": "Наприклад, група в Telegram. Сюди надходять нагадування, які бачать усі.",
             "householdDigestTitle": "Сімейний огляд",
             "householdDigestHint": "Надходить отримувачам родини й показує лише те, що бачать усі."
-        }
+        },
+        "moduleUpdateAvailable": "Доступне оновлення: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "Доступна нова версія.",
+        "moduleUpdateApply": "Оновити зараз",
+        "moduleUpdateLater": "Пізніше",
+        "moduleUpdateCheck": "Перевірити оновлення",
+        "moduleUpdateChecked": "Остання перевірка: {{date}}",
+        "moduleUpdateNotChecked": "Оновлення ще не перевірялися.",
+        "moduleUpdateAllCurrent": "Усі модулі з GitHub актуальні.",
+        "moduleUpdateNeedsWebInstall": "Для оновлення потрібно ввімкнути MODULES_ALLOW_WEB_INSTALL.",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} встановлено. Увімкнути зараз?",
+        "moduleUpdateEnableDetail": "Кожна нова версія надходить вимкненою, щоб нічого не запускалося без перевірки.",
+        "moduleUpdateEnable": "Увімкнути",
+        "moduleUpdateUpToDate": "Цей модуль уже актуальний.",
+        "moduleUpdateCheckFailed": "Остання перевірка оновлень не вдалася."
     },
     "login": {
         "tagline": "З поверненням. Ваш дім - в одному місці.",

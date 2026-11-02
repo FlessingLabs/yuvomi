@@ -3720,7 +3720,21 @@
             "householdHint": "Например, группа в Telegram. Сюда приходят напоминания, которые видят все.",
             "householdDigestTitle": "Семейный обзор",
             "householdDigestHint": "Приходит получателям семьи и показывает только то, что видят все."
-        }
+        },
+        "moduleUpdateAvailable": "Доступно обновление: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "Доступна новая версия.",
+        "moduleUpdateApply": "Обновить сейчас",
+        "moduleUpdateLater": "Позже",
+        "moduleUpdateCheck": "Проверить обновления",
+        "moduleUpdateChecked": "Последняя проверка: {{date}}",
+        "moduleUpdateNotChecked": "Обновления ещё не проверялись.",
+        "moduleUpdateAllCurrent": "Все модули из GitHub актуальны.",
+        "moduleUpdateNeedsWebInstall": "Для обновления нужно включить MODULES_ALLOW_WEB_INSTALL.",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} установлен. Включить сейчас?",
+        "moduleUpdateEnableDetail": "Каждая новая версия приходит выключенной, чтобы ничего не запускалось без проверки.",
+        "moduleUpdateEnable": "Включить",
+        "moduleUpdateUpToDate": "Этот модуль уже актуален.",
+        "moduleUpdateCheckFailed": "Последняя проверка обновлений не удалась."
     },
     "login": {
         "tagline": "С возвращением. Ваш дом - в одном месте.",

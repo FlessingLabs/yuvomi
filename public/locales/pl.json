@@ -3738,7 +3738,21 @@
             "householdHint": "Na przykład grupa w Telegramie. Trafiają tu przypomnienia widoczne dla wszystkich.",
             "householdDigestTitle": "Podgląd rodzinny",
             "householdDigestHint": "Trafia do celów rodziny i pokazuje tylko to, co wszyscy mogą widzieć."
-        }
+        },
+        "moduleUpdateAvailable": "Dostępna aktualizacja: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "Dostępna jest nowa wersja.",
+        "moduleUpdateApply": "Zaktualizuj teraz",
+        "moduleUpdateLater": "Później",
+        "moduleUpdateCheck": "Sprawdź aktualizacje",
+        "moduleUpdateChecked": "Ostatnio sprawdzono: {{date}}",
+        "moduleUpdateNotChecked": "Jeszcze nie sprawdzano aktualizacji.",
+        "moduleUpdateAllCurrent": "Wszystkie moduły z GitHuba są aktualne.",
+        "moduleUpdateNeedsWebInstall": "Aktualizacja wymaga włączenia MODULES_ALLOW_WEB_INSTALL.",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} jest zainstalowany. Włączyć teraz?",
+        "moduleUpdateEnableDetail": "Każda nowa wersja przychodzi wyłączona, aby nic nie trafiło do użytku niesprawdzone.",
+        "moduleUpdateEnable": "Włącz",
+        "moduleUpdateUpToDate": "Ten moduł jest już aktualny.",
+        "moduleUpdateCheckFailed": "Ostatnie sprawdzanie aktualizacji nie powiodło się."
     },
     "login": {
         "tagline": "Witaj ponownie. Twój dom w jednym miejscu.",

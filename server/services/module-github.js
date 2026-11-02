@@ -409,5 +409,47 @@ export function createGithubInstaller({
     };
   }
 
-  return { resolve: resolveTarget, fetchArchive };
+  /**
+   * DIE NEUESTE FASSUNG EINES INSTALLIERTEN MODULS (Update-Pruefung). Folgt
+   * dem, was installiert wurde: kam es aus einem Release (der Ref ist der Tag
+   * eines Releases), zaehlt das neueste Release; sonst der Branch oder Tag
+   * selbst - ein Commit als Ref bleibt stehen und meldet nie ein Update.
+   * Die Versionsnummer kommt aus module.json an genau diesem Commit.
+   *
+   * @returns {Promise<{ ref: string, commit: string, version: string|null, track: 'release'|'ref' }>}
+   */
+  async function latest({ owner, repo, ref, path: subPath = null }, { signal } = {}) {
+    if (!validRepoParts(owner, repo) || !isValidRef(ref)) throw badUrl();
+    const repoPath = `/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`;
+    let track = 'ref';
+    let target = ref;
+    const release = await githubJson(`${repoPath}/releases/tags/${encodeRef(ref)}`, signal);
+    if (release) {
+      const newest = await githubJson(`${repoPath}/releases/latest`, signal);
+      if (newest && typeof newest.tag_name === 'string' && isValidRef(newest.tag_name)) {
+        track = 'release';
+        target = newest.tag_name;
+      }
+    }
+    const shaRes = await githubGet(`${API}${repoPath}/commits/${encodeRef(target)}`, {
+      accept: 'application/vnd.github.sha', signal, limit: 200, missing: [404, 422],
+    });
+    if (shaRes.status === 404 || shaRes.status === 422) throw new InstallError('ref_not_found', `The ref ${target} no longer exists.`);
+    const commit = shaRes.body.toString('utf8').trim().toLowerCase();
+    if (!/^[0-9a-f]{40}$/.test(commit)) throw new InstallError('github_failed', 'GitHub did not report a commit.');
+    let version = null;
+    const manifestPath = [subPath, 'module.json'].filter(Boolean).map(encodeURIComponent).join('/');
+    const raw = await githubGet(`${API}${repoPath}/contents/${manifestPath}?ref=${commit}`, {
+      accept: 'application/vnd.github.raw', signal, limit: 64 * 1024, missing: [404],
+    });
+    if (raw.status !== 404) {
+      try {
+        const manifest = JSON.parse(raw.body.toString('utf8'));
+        if (typeof manifest.version === 'string' && manifest.version.length <= 50) version = manifest.version;
+      } catch { /* keine lesbare Version - das Update bleibt trotzdem erkennbar */ }
+    }
+    return { ref: target, commit, version, track };
+  }
+
+  return { resolve: resolveTarget, fetchArchive, latest };
 }

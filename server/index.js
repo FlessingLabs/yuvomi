@@ -44,6 +44,7 @@ import { startScheduler as startPushScheduler } from './services/push-scheduler.
 import { startScheduler as startMedicationScheduler } from './services/medication-scheduler.js';
 import { startScheduler as startRecipeProviderScheduler } from './services/recipe-provider-sync.js';
 import { startWasteSourceScheduler } from './services/waste-source-scheduler.js';
+import { startModuleUpdateScheduler } from './services/module-updates.js';
 import { emailService } from './services/email.js';
 import { passwordLoginWarning, OIDC_PASSWORD_SENTINEL } from './services/oidc.js';
 import dashboardRouter from './routes/dashboard.js';
@@ -1005,6 +1006,9 @@ const server = app.listen(PORT, BIND_ADDRESS, () => {
   startMedicationScheduler();
   startRecipeProviderScheduler();
   startWasteSourceScheduler();
+  // Einmal am Tag nachsehen, ob es neuere Fassungen der Module aus GitHub gibt.
+  // Nur ein Befund - aktualisiert wird nichts von selbst (module-updates.js).
+  startModuleUpdateScheduler();
 });
 
 export default app;

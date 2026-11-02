@@ -123,6 +123,8 @@ const REASON_STATUS = {
   // put it there and neither takes it away (deleteModule) nor swaps it out
   // (installFilesUnlocked) - a replace removes the old files just the same.
   not_web_installed: 409,
+  // Update-Pruefung (Migration 277): der gefundene Stand ist schon installiert.
+  up_to_date: 409,
   too_large: 413,
   too_many_entries: 413,
   bomb: 413,

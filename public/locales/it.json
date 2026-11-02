@@ -3494,7 +3494,21 @@
             "householdHint": "Per esempio un gruppo Telegram. Qui arrivano i promemoria visibili a tutti.",
             "householdDigestTitle": "Anteprima di famiglia",
             "householdDigestHint": "Va alle destinazioni della famiglia e mostra solo ciò che tutti possono vedere."
-        }
+        },
+        "moduleUpdateAvailable": "Aggiornamento disponibile: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "È disponibile una nuova versione.",
+        "moduleUpdateApply": "Aggiorna ora",
+        "moduleUpdateLater": "Più tardi",
+        "moduleUpdateCheck": "Cerca aggiornamenti",
+        "moduleUpdateChecked": "Ultimo controllo: {{date}}",
+        "moduleUpdateNotChecked": "Nessun controllo degli aggiornamenti finora.",
+        "moduleUpdateAllCurrent": "Tutti i moduli da GitHub sono aggiornati.",
+        "moduleUpdateNeedsWebInstall": "Per aggiornare deve essere attivo MODULES_ALLOW_WEB_INSTALL.",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} è installato. Attivarlo ora?",
+        "moduleUpdateEnableDetail": "Ogni nuova versione arriva disattivata, così nulla va online senza essere visto.",
+        "moduleUpdateEnable": "Attiva",
+        "moduleUpdateUpToDate": "Questo modulo è già aggiornato.",
+        "moduleUpdateCheckFailed": "L’ultimo controllo degli aggiornamenti non è riuscito."
     },
     "login": {
         "tagline": "Bentornato. La tua casa in un unico posto.",

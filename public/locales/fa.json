@@ -3512,7 +3512,21 @@
             "householdHint": "مثلاً یک گروه تلگرام. یادآوری‌هایی که همه می‌بینند اینجا می‌آیند.",
             "householdDigestTitle": "پیش‌نمایش خانواده",
             "householdDigestHint": "به مقصدهای خانواده می‌رود و فقط چیزی را نشان می‌دهد که همه می‌بینند."
-        }
+        },
+        "moduleUpdateAvailable": "به‌روزرسانی موجود است: {{from}} ← {{to}}",
+        "moduleUpdateAvailableNew": "نسخهٔ جدیدی موجود است.",
+        "moduleUpdateApply": "اکنون به‌روزرسانی شود",
+        "moduleUpdateLater": "بعداً",
+        "moduleUpdateCheck": "بررسی به‌روزرسانی",
+        "moduleUpdateChecked": "آخرین بررسی: {{date}}",
+        "moduleUpdateNotChecked": "هنوز به‌روزرسانی بررسی نشده است.",
+        "moduleUpdateAllCurrent": "همهٔ ماژول‌های GitHub به‌روز هستند.",
+        "moduleUpdateNeedsWebInstall": "برای به‌روزرسانی باید MODULES_ALLOW_WEB_INSTALL روشن باشد.",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} نصب شد. اکنون روشن شود؟",
+        "moduleUpdateEnableDetail": "هر نسخهٔ جدید خاموش می‌رسد تا چیزی بدون بازبینی فعال نشود.",
+        "moduleUpdateEnable": "روشن کردن",
+        "moduleUpdateUpToDate": "این ماژول از قبل به‌روز است.",
+        "moduleUpdateCheckFailed": "آخرین بررسی به‌روزرسانی ناموفق بود."
     },
     "login": {
         "tagline": "دوباره خوش آمدید. خانهٔ شما در یک جا.",

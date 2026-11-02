@@ -11863,6 +11863,26 @@ const MIGRATIONS = [
       CREATE UNIQUE INDEX IF NOT EXISTS idx_notification_digests_household ON notification_digests(scope) WHERE scope = 'household';
     `,
   },
+  {
+    version: 277,
+    description: 'Modules: the result of the daily update check per installed module',
+    up: `
+      -- WAS DIE TAEGLICHE PRUEFUNG GEFUNDEN HAT, je Modul aus Settings (GitHub).
+      -- Nur ein Befund: es wird NICHTS von selbst aktualisiert. Ein Admin
+      -- ersetzt das Modul mit einem Klick, und es kommt wie jede Ersetzung
+      -- ausgeschaltet an (MODULES.md, DECISIONS.md 12). snoozed_commit merkt
+      -- "Spaeter" fuer GENAU diesen Stand; ein neuerer meldet sich wieder.
+      CREATE TABLE IF NOT EXISTS module_update_state (
+        module_id      TEXT PRIMARY KEY,
+        checked_at     TEXT NOT NULL,
+        latest_ref     TEXT,
+        latest_commit  TEXT,
+        latest_version TEXT,
+        snoozed_commit TEXT,
+        error          TEXT
+      );
+    `,
+  },
 ];
 
 /**

@@ -61,6 +61,9 @@ const REASON_KEYS = Object.freeze({
   // Seite, sollen sie lesbar sein.
   not_found: 'settings.moduleDeleteErrorNotFound',
   bad_id: 'settings.moduleDeleteErrorBadId',
+  // Update-Pruefung (Migration 277): der gefundene Stand ist schon installiert -
+  // etwa, weil eine zweite offene Seite ihn gerade eingespielt hat.
+  up_to_date: 'settings.moduleUpdateUpToDate',
 });
 
 /**

@@ -3494,7 +3494,21 @@
             "householdHint": "Például egy Telegram-csoport. Ide mennek a mindenki által látható emlékeztetők.",
             "householdDigestTitle": "Családi előnézet",
             "householdDigestHint": "A család céljaira megy, és csak azt mutatja, amit mindenki láthat."
-        }
+        },
+        "moduleUpdateAvailable": "Frissítés érhető el: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "Új verzió érhető el.",
+        "moduleUpdateApply": "Frissítés most",
+        "moduleUpdateLater": "Később",
+        "moduleUpdateCheck": "Frissítések keresése",
+        "moduleUpdateChecked": "Utolsó ellenőrzés: {{date}}",
+        "moduleUpdateNotChecked": "Még nem kerestünk frissítéseket.",
+        "moduleUpdateAllCurrent": "Minden GitHubról származó modul naprakész.",
+        "moduleUpdateNeedsWebInstall": "A frissítéshez be kell kapcsolni a MODULES_ALLOW_WEB_INSTALL beállítást.",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} telepítve. Bekapcsolod most?",
+        "moduleUpdateEnableDetail": "Minden új verzió kikapcsolva érkezik, hogy semmi ne kerüljön élesbe átnézés nélkül.",
+        "moduleUpdateEnable": "Bekapcsolás",
+        "moduleUpdateUpToDate": "Ez a modul már naprakész.",
+        "moduleUpdateCheckFailed": "Az utolsó frissítéskeresés nem sikerült."
     },
     "login": {
         "tagline": "Üdv újra! Az otthon ügyei egy helyen.",

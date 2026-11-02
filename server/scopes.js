@@ -139,7 +139,7 @@ function requiredAccess(method) {
  * EINE Liste fuer die Scope-Zuordnung hier und den Router
  * (routes/module-records.js) - DECISIONS.md, Eintrag 2.
  */
-export const RESERVED_MODULE_SEGMENTS = Object.freeze(new Set(['assets', 'install', 'storage']));
+export const RESERVED_MODULE_SEGMENTS = Object.freeze(new Set(['assets', 'install', 'storage', 'updates']));
 
 /** Die Pfade unter /modules/<id>/, die dem Modul `ext:<id>` gehoeren (Migrationen 274, 275). */
 export const MODULE_STORAGE_SEGMENTS = Object.freeze(new Set(['records', 'people', 'grants']));

@@ -3494,7 +3494,21 @@
             "householdHint": "Bijvoorbeeld een Telegram-groep. Herinneringen die iedereen mag zien komen hier.",
             "householdDigestTitle": "Gezinsvoorbeeld",
             "householdDigestHint": "Gaat naar de bestemmingen van het gezin en toont alleen wat iedereen mag zien."
-        }
+        },
+        "moduleUpdateAvailable": "Update beschikbaar: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "Er is een nieuwe versie beschikbaar.",
+        "moduleUpdateApply": "Nu bijwerken",
+        "moduleUpdateLater": "Later",
+        "moduleUpdateCheck": "Op updates controleren",
+        "moduleUpdateChecked": "Laatst gecontroleerd: {{date}}",
+        "moduleUpdateNotChecked": "Nog niet op updates gecontroleerd.",
+        "moduleUpdateAllCurrent": "Alle modules van GitHub zijn actueel.",
+        "moduleUpdateNeedsWebInstall": "Bijwerken kan pas als MODULES_ALLOW_WEB_INSTALL aan staat.",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} is geïnstalleerd. Nu inschakelen?",
+        "moduleUpdateEnableDetail": "Elke nieuwe versie komt uitgeschakeld binnen, zodat niets ongezien live gaat.",
+        "moduleUpdateEnable": "Inschakelen",
+        "moduleUpdateUpToDate": "Deze module is al actueel.",
+        "moduleUpdateCheckFailed": "De laatste controle op updates is mislukt."
     },
     "login": {
         "tagline": "Welkom terug. Je huishouden op één plek.",

@@ -3494,7 +3494,21 @@
             "householdHint": "जैसे कोई टेलीग्राम समूह। सबको दिखने वाले रिमाइंडर यहाँ आते हैं।",
             "householdDigestTitle": "परिवार का पूर्वावलोकन",
             "householdDigestHint": "परिवार के गंतव्यों पर जाता है और केवल वही दिखाता है जो सब देख सकते हैं।"
-        }
+        },
+        "moduleUpdateAvailable": "अपडेट उपलब्ध: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "नया संस्करण उपलब्ध है।",
+        "moduleUpdateApply": "अभी अपडेट करें",
+        "moduleUpdateLater": "बाद में",
+        "moduleUpdateCheck": "अपडेट जाँचें",
+        "moduleUpdateChecked": "पिछली जाँच: {{date}}",
+        "moduleUpdateNotChecked": "अभी तक अपडेट नहीं जाँचे गए।",
+        "moduleUpdateAllCurrent": "GitHub के सभी मॉड्यूल अद्यतित हैं।",
+        "moduleUpdateNeedsWebInstall": "अपडेट के लिए MODULES_ALLOW_WEB_INSTALL चालू होना चाहिए।",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} इंस्टॉल हो गया। अभी चालू करें?",
+        "moduleUpdateEnableDetail": "हर नया संस्करण बंद आता है, ताकि बिना देखे कुछ चालू न हो।",
+        "moduleUpdateEnable": "चालू करें",
+        "moduleUpdateUpToDate": "यह मॉड्यूल पहले से अद्यतित है।",
+        "moduleUpdateCheckFailed": "पिछली अपडेट जाँच विफल रही।"
     },
     "login": {
         "tagline": "फिर से स्वागत है। आपका घर, एक ही जगह।",

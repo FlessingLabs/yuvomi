@@ -3512,7 +3512,21 @@
             "householdHint": "Misalnya grup Telegram. Pengingat yang boleh dilihat semua orang dikirim ke sini.",
             "householdDigestTitle": "Pratinjau keluarga",
             "householdDigestHint": "Dikirim ke tujuan keluarga dan hanya menampilkan yang boleh dilihat semua orang."
-        }
+        },
+        "moduleUpdateAvailable": "Pembaruan tersedia: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "Versi baru tersedia.",
+        "moduleUpdateApply": "Perbarui sekarang",
+        "moduleUpdateLater": "Nanti",
+        "moduleUpdateCheck": "Periksa pembaruan",
+        "moduleUpdateChecked": "Terakhir diperiksa: {{date}}",
+        "moduleUpdateNotChecked": "Belum pernah memeriksa pembaruan.",
+        "moduleUpdateAllCurrent": "Semua modul dari GitHub sudah terbaru.",
+        "moduleUpdateNeedsWebInstall": "Pembaruan memerlukan MODULES_ALLOW_WEB_INSTALL aktif.",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} terpasang. Aktifkan sekarang?",
+        "moduleUpdateEnableDetail": "Setiap versi baru datang dalam keadaan nonaktif, agar tidak ada yang aktif tanpa dilihat.",
+        "moduleUpdateEnable": "Aktifkan",
+        "moduleUpdateUpToDate": "Modul ini sudah terbaru.",
+        "moduleUpdateCheckFailed": "Pemeriksaan pembaruan terakhir gagal."
     },
     "login": {
         "tagline": "Selamat datang kembali. Rumah Anda dalam satu tempat.",

@@ -3512,7 +3512,21 @@
             "householdHint": "예: 텔레그램 그룹. 모두가 볼 수 있는 알림이 여기로 옵니다.",
             "householdDigestTitle": "가족 미리보기",
             "householdDigestHint": "가족 수신처로 가며 모두가 볼 수 있는 내용만 보여 줍니다."
-        }
+        },
+        "moduleUpdateAvailable": "업데이트 있음: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "새 버전이 있습니다.",
+        "moduleUpdateApply": "지금 업데이트",
+        "moduleUpdateLater": "나중에",
+        "moduleUpdateCheck": "업데이트 확인",
+        "moduleUpdateChecked": "마지막 확인: {{date}}",
+        "moduleUpdateNotChecked": "아직 업데이트를 확인하지 않았습니다.",
+        "moduleUpdateAllCurrent": "GitHub에서 설치한 모든 모듈이 최신입니다.",
+        "moduleUpdateNeedsWebInstall": "업데이트하려면 MODULES_ALLOW_WEB_INSTALL을 켜야 합니다.",
+        "moduleUpdateEnableConfirm": "{{name}} {{version}} 설치 완료. 지금 켤까요?",
+        "moduleUpdateEnableDetail": "새 버전은 항상 꺼진 상태로 도착하므로 확인 없이 적용되는 일이 없습니다.",
+        "moduleUpdateEnable": "켜기",
+        "moduleUpdateUpToDate": "이 모듈은 이미 최신입니다.",
+        "moduleUpdateCheckFailed": "마지막 업데이트 확인에 실패했습니다."
     },
     "login": {
         "tagline": "다시 오신 것을 환영합니다. 우리 집의 모든 일을 한곳에서.",

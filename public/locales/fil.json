@@ -3512,7 +3512,21 @@
             "householdHint": "Halimbawa, isang grupo sa Telegram. Dito napupunta ang mga paalalang nakikita ng lahat.",
             "householdDigestTitle": "Preview ng pamilya",
             "householdDigestHint": "Napupunta sa mga destinasyon ng pamilya at ipinapakita lang ang nakikita ng lahat."
-        }
+        },
+        "moduleUpdateAvailable": "May update: {{from}} → {{to}}",
+        "moduleUpdateAvailableNew": "May bagong bersyon.",
+        "moduleUpdateApply": "I-update ngayon",
+        "moduleUpdateLater": "Mamaya",
+        "moduleUpdateCheck": "Tingnan ang mga update",
+        "moduleUpdateChecked": "Huling sinuri: {{date}}",
+        "moduleUpdateNotChecked": "Hindi pa nasusuri ang mga update.",
+        "moduleUpdateAllCurrent": "Napapanahon ang lahat ng module mula sa GitHub.",
+        "moduleUpdateNeedsWebInstall": "Kailangang naka-on ang MODULES_ALLOW_WEB_INSTALL para makapag-update.",
+        "moduleUpdateEnableConfirm": "Na-install ang {{name}} {{version}}. I-on na ngayon?",
+        "moduleUpdateEnableDetail": "Bawat bagong bersyon ay dumarating na naka-off, para walang mag-live nang hindi nakikita.",
+        "moduleUpdateEnable": "I-on",
+        "moduleUpdateUpToDate": "Napapanahon na ang module na ito.",
+        "moduleUpdateCheckFailed": "Nabigo ang huling pagsusuri ng update."
     },
     "login": {
         "tagline": "Maligayang pagbabalik. Ang iyong tahanan sa iisang lugar.",
